@@ -14,7 +14,9 @@ namespace NetVanguard.App.ViewModels
         private readonly ITrafficClientService _trafficClient;
 
         [ObservableProperty]
+#pragma warning disable MVVMTK0045
         private ObservableCollection<NetworkApplication> _activeApplications = new();
+#pragma warning restore MVVMTK0045
 
         public MainViewModel()
         {

@@ -28,9 +28,9 @@
                 </Grid.RowDefinitions>
                 <TextBlock Text="System Traffic (Last 30s)" Style="{StaticResource SubtitleTextBlockStyle}" Margin="0,0,0,12"/>
                 <lvc:CartesianChart Grid.Row="1"
-                    Series="{x:Bind ViewModel.TrafficSeries, Mode=OneWay}"
-                    XAxes="{x:Bind ViewModel.XAxes, Mode=OneWay}"
-                    YAxes="{x:Bind ViewModel.YAxes, Mode=OneWay}"
+                    Series="{Binding ViewModel.TrafficSeries, Mode=OneWay}"
+                    XAxes="{Binding ViewModel.XAxes, Mode=OneWay}"
+                    YAxes="{Binding ViewModel.YAxes, Mode=OneWay}"
                     TooltipPosition="Hidden">
                 </lvc:CartesianChart>
             </Grid>

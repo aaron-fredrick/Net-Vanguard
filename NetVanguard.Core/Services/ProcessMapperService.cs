@@ -1,15 +1,9 @@
-using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using NetVanguard.Core.Models;
 
 namespace NetVanguard.Core.Services
 {
-    public interface IProcessMapperService
-    {
-        NetworkApplication GetOrResolveApplication(int processId);
-    }
-
     public class ProcessMapperService : IProcessMapperService
     {
         private readonly ConcurrentDictionary<int, NetworkApplication> _processCache = new();
@@ -17,36 +11,33 @@ namespace NetVanguard.Core.Services
         public NetworkApplication GetOrResolveApplication(int processId)
         {
             if (processId <= 0)
-            {
                 return new NetworkApplication { ProcessId = processId, ProcessName = "System", ExecutablePath = "System" };
-            }
 
-            return _processCache.GetOrAdd(processId, pid => ResolveProcessInfo(pid));
+            return _processCache.GetOrAdd(processId, resolveProcessInfo);
         }
 
-        private NetworkApplication ResolveProcessInfo(int pid)
+        private static NetworkApplication resolveProcessInfo(int pid)
         {
-            var app = new NetworkApplication { ProcessId = pid };
             try
             {
                 using var process = Process.GetProcessById(pid);
-                app.ProcessName = process.ProcessName;
-                
-                // Getting MainModule.FileName can throw AccessDenied for elevated processes
-                // if NetVanguard isn't running as admin, but Daemon will be admin.
-                app.ExecutablePath = process.MainModule?.FileName ?? string.Empty;
-                
-                // Heuristic for services
-                app.IsWindowsService = app.ExecutablePath.EndsWith("svchost.exe", StringComparison.OrdinalIgnoreCase);
+                return new NetworkApplication
+                {
+                    ProcessId = pid,
+                    ProcessName = process.ProcessName,
+                    ExecutablePath = process.MainModule?.FileName ?? string.Empty,
+                    IsWindowsService = process.MainModule?.FileName?.EndsWith("svchost.exe", StringComparison.OrdinalIgnoreCase) ?? false
+                };
             }
             catch (Exception)
             {
-                // Process might have exited already or Access Denied
-                app.ProcessName = $"Unknown (PID {pid})";
-                app.ExecutablePath = string.Empty;
+                return new NetworkApplication
+                {
+                    ProcessId = pid,
+                    ProcessName = $"Unknown (PID {pid})",
+                    ExecutablePath = string.Empty
+                };
             }
-
-            return app;
         }
     }
 }
