@@ -11,6 +11,7 @@ namespace NetVanguard.App.Views
         {
             ViewModel = new MainViewModel();
             this.InitializeComponent();
+            this.DataContext = ViewModel;
         }
     }
 }

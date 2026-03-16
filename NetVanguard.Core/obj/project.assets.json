@@ -1072,11 +1072,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "d:\\projects\\Net-Vanguard\\NetVanguard.Core\\NetVanguard.Core.csproj",
+      "projectUniqueName": "D:\\projects\\Net-Vanguard\\NetVanguard.Core\\NetVanguard.Core.csproj",
       "projectName": "NetVanguard.Core",
-      "projectPath": "d:\\projects\\Net-Vanguard\\NetVanguard.Core\\NetVanguard.Core.csproj",
+      "projectPath": "D:\\projects\\Net-Vanguard\\NetVanguard.Core\\NetVanguard.Core.csproj",
       "packagesPath": "C:\\Users\\Dell\\.nuget\\packages\\",
-      "outputPath": "d:\\projects\\Net-Vanguard\\NetVanguard.Core\\obj\\",
+      "outputPath": "D:\\projects\\Net-Vanguard\\NetVanguard.Core\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "D:\\Microsoft Visual Studio\\Shared\\NuGetPackages"
