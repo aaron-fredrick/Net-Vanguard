@@ -1,4 +1,6 @@
+using NetVanguard.Core.Models;
 using NetVanguard.Core.Services;
+using NetVanguard.Daemon.Services;
 
 namespace NetVanguard.Daemon;
 
@@ -6,11 +8,16 @@ public class Worker : BackgroundService
 {
     private readonly ILogger<Worker> _logger;
     private readonly ITrafficAggregationService _trafficAggregationService;
+    private readonly IPipeServerService _pipeServer;
 
-    public Worker(ILogger<Worker> logger, ITrafficAggregationService trafficAggregationService)
+    public Worker(
+        ILogger<Worker> logger, 
+        ITrafficAggregationService trafficAggregationService,
+        IPipeServerService pipeServer)
     {
         _logger = logger;
         _trafficAggregationService = trafficAggregationService;
+        _pipeServer = pipeServer;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -19,20 +26,21 @@ public class Worker : BackgroundService
         
         try
         {
-            _trafficAggregationService.OnApplicationsUpdated += (s, apps) =>
+            _trafficAggregationService.OnApplicationsUpdated += async (s, apps) =>
             {
-                // In Phase 3, we will pipe this via gRPC/NamedPipes to the UI
-                _logger.LogInformation($"Tracked {apps.Count()} active applications.");
+                var message = new TrafficUpdateMessage { Applications = apps.ToList() };
+                await _pipeServer.BroadcastUpdateAsync(message, stoppingToken);
+                
+                _logger.LogInformation($"Broadcasted update for {apps.Count()} applications.");
             };
 
             _trafficAggregationService.StartAggregating();
 
-            // Wait until cancellation is requested
             await Task.Delay(-1, stoppingToken);
         }
         catch (UnauthorizedAccessException ex)
         {
-            _logger.LogError(ex, "Failed to start ETW Monitor. Did you run the application as Administrator?");
+            _logger.LogError(ex, "Failed to start ETW Monitor. Admin privileges required.");
             throw;
         }
         finally

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "wt5RQHetJAc=",
+  "dgSpecHash": "4gj1PDRjD4E=",
   "success": true,
-  "projectFilePath": "D:\\projects\\Net-Vanguard\\NetVanguard.Core\\NetVanguard.Core.csproj",
+  "projectFilePath": "d:\\projects\\Net-Vanguard\\NetVanguard.Core\\NetVanguard.Core.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Dell\\.nuget\\packages\\microsoft.diagnostics.netcore.client\\0.2.510501\\microsoft.diagnostics.netcore.client.0.2.510501.nupkg.sha512",
     "C:\\Users\\Dell\\.nuget\\packages\\microsoft.diagnostics.tracing.traceevent\\3.1.30\\microsoft.diagnostics.tracing.traceevent.3.1.30.nupkg.sha512",

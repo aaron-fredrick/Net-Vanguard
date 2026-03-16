@@ -81,10 +81,11 @@ ClientBin/
 **/packages/*
 # except build/, which is used as an MSBuild target.
 !**/packages/build/
-# Uncomment if using NuGet Config to restore to a specific directory
-#pkgs/
-#project.lock.json
+# project-specific NuGet files
+project.lock.json
 project.assets.json
+*.nuget.cache
+
 
 # StyleCop
 StyleCopReport.xml

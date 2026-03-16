@@ -5,6 +5,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="using:NetVanguard.App"
+    xmlns:models="using:NetVanguard.Core.Models"
     xmlns:lvc="using:LiveChartsCore.SkiaSharpView.WinUI"
     mc:Ignorable="d" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     
@@ -25,12 +27,14 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <TextBlock Text="System Traffic (Last 30s)" Style="{StaticResource SubtitleTextBlockStyle}" Margin="0,0,0,12"/>
+                <!-- 
                 <lvc:CartesianChart Grid.Row="1"
                     Series="{x:Bind ViewModel.TrafficSeries, Mode=OneWay}"
                     XAxes="{x:Bind ViewModel.XAxes, Mode=OneWay}"
                     YAxes="{x:Bind ViewModel.YAxes, Mode=OneWay}"
                     TooltipPosition="Hidden">
                 </lvc:CartesianChart>
+                -->
             </Grid>
         </Border>
 
@@ -45,7 +49,7 @@
                 
                 <ListView Grid.Row="1" ItemsSource="{x:Bind ViewModel.ActiveApplications, Mode=OneWay}">
                     <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="models:NetworkApplication" xmlns:models="using:NetVanguard.Core.Models">
+                        <DataTemplate x:DataType="models:NetworkApplication">
                             <Grid Padding="8">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="2*"/>

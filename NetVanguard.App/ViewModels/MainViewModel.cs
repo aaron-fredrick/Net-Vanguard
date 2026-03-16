@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
+using NetVanguard.App.Services;
 using NetVanguard.Core.Models;
 using SkiaSharp;
 
@@ -10,8 +11,17 @@ namespace NetVanguard.App.ViewModels
 {
     public partial class MainViewModel : ObservableObject
     {
+        private readonly ITrafficClientService _trafficClient;
+
         [ObservableProperty]
         private ObservableCollection<NetworkApplication> _activeApplications = new();
+
+        public MainViewModel()
+        {
+            _trafficClient = new TrafficClientService();
+            _trafficClient.OnMessageReceived += (s, msg) => UpdateData(msg.Applications);
+            _trafficClient.StartListening();
+        }
 
         public ISeries[] TrafficSeries { get; set; } =
         {
@@ -56,9 +66,9 @@ namespace NetVanguard.App.ViewModels
         public void UpdateData(IEnumerable<NetworkApplication> apps)
         {
             // Ensure UI thread updates
-            App.Current.MainWindow.DispatcherQueue.TryEnqueue(() =>
+            App.Current.MainWindow?.DispatcherQueue.TryEnqueue(() =>
             {
-                ActiveApplications.Clear();
+                _activeApplications.Clear();
                 double totalDownload = 0;
                 double totalUpload = 0;
 

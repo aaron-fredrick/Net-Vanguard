@@ -8,7 +8,7 @@ namespace NetVanguard.App
     public partial class App : Application
     {
         public new static App Current => (App)Application.Current;
-        public Window MainWindow { get; private set; }
+        public Window? MainWindow { get; private set; }
 
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
@@ -39,12 +39,12 @@ namespace NetVanguard.App
             MainWindow.Title = "Net-Vanguard Dashboard";
             
             // Set App window size (WinUI 3 requires interop for this)
-            var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(MainWindow);
+            var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(MainWindow!);
             var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(hwnd);
             var appWindow = Microsoft.UI.Windowing.AppWindow.GetFromWindowId(windowId);
             appWindow.Resize(new Windows.Graphics.SizeInt32 { Width = 1100, Height = 800 });
             
-            MainWindow.Activate();
+            MainWindow!.Activate();
         }
 
         /// <summary>

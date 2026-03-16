@@ -1,8 +1,4 @@
-namespace NetVanguard.App.Views
-{
-    /// <summary>
-    /// A simple page that can be used on its own or navigated to within a Frame.
-    /// </summary>
+using Microsoft.UI.Xaml.Controls;
 using NetVanguard.App.ViewModels;
 
 namespace NetVanguard.App.Views
@@ -13,9 +9,8 @@ namespace NetVanguard.App.Views
 
         public MainPage()
         {
-            this.InitializeComponent();
             ViewModel = new MainViewModel();
+            this.InitializeComponent();
         }
     }
-}
 }

@@ -1,5 +1,6 @@
 using NetVanguard.Core.Services;
 using NetVanguard.Daemon;
+using NetVanguard.Daemon.Services;
 
 var builder = Host.CreateApplicationBuilder(args);
 
@@ -7,6 +8,7 @@ var builder = Host.CreateApplicationBuilder(args);
 builder.Services.AddSingleton<IEtwMonitorService, EtwMonitorService>();
 builder.Services.AddSingleton<IProcessMapperService, ProcessMapperService>();
 builder.Services.AddSingleton<ITrafficAggregationService, TrafficAggregationService>();
+builder.Services.AddSingleton<IPipeServerService, PipeServerService>();
 
 builder.Services.AddHostedService<Worker>();
 

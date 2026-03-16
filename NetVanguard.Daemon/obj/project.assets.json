@@ -2301,11 +2301,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\projects\\Net-Vanguard\\NetVanguard.Daemon\\NetVanguard.Daemon.csproj",
+      "projectUniqueName": "d:\\projects\\Net-Vanguard\\NetVanguard.Daemon\\NetVanguard.Daemon.csproj",
       "projectName": "NetVanguard.Daemon",
-      "projectPath": "D:\\projects\\Net-Vanguard\\NetVanguard.Daemon\\NetVanguard.Daemon.csproj",
+      "projectPath": "d:\\projects\\Net-Vanguard\\NetVanguard.Daemon\\NetVanguard.Daemon.csproj",
       "packagesPath": "C:\\Users\\Dell\\.nuget\\packages\\",
-      "outputPath": "D:\\projects\\Net-Vanguard\\NetVanguard.Daemon\\obj\\",
+      "outputPath": "d:\\projects\\Net-Vanguard\\NetVanguard.Daemon\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "D:\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -2326,8 +2326,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "D:\\projects\\Net-Vanguard\\NetVanguard.Core\\NetVanguard.Core.csproj": {
-              "projectPath": "D:\\projects\\Net-Vanguard\\NetVanguard.Core\\NetVanguard.Core.csproj"
+            "d:\\projects\\Net-Vanguard\\NetVanguard.Core\\NetVanguard.Core.csproj": {
+              "projectPath": "d:\\projects\\Net-Vanguard\\NetVanguard.Core\\NetVanguard.Core.csproj"
             }
           }
         }
