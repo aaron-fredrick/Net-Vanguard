@@ -14,7 +14,7 @@ namespace NetVanguard.App.ViewModels
         private readonly ITrafficClientService _trafficClient;
 
         [ObservableProperty]
-        private ObservableCollection<NetworkApplication> _activeApplications = new();
+        public partial ObservableCollection<NetworkApplication> ActiveApplications { get; set; } = new();
 
         public MainViewModel()
         {
@@ -68,7 +68,7 @@ namespace NetVanguard.App.ViewModels
             // Ensure UI thread updates
             App.Current.MainWindow?.DispatcherQueue.TryEnqueue(() =>
             {
-                _activeApplications.Clear();
+                ActiveApplications.Clear();
                 double totalDownload = 0;
                 double totalUpload = 0;
 
