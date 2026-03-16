@@ -14,7 +14,7 @@ namespace NetVanguard.App.ViewModels
         private readonly ITrafficClientService _trafficClient;
 
         [ObservableProperty]
-        public partial ObservableCollection<NetworkApplication> ActiveApplications { get; set; } = new();
+        private ObservableCollection<NetworkApplication> _activeApplications = new();
 
         public MainViewModel()
         {
