@@ -1,0 +1,187 @@
+{
+  "version": 3,
+  "targets": {
+    "net8.0-windows10.0.19041": {},
+    "net8.0-windows10.0.19041/win-arm64": {},
+    "net8.0-windows10.0.19041/win-x64": {},
+    "net8.0-windows10.0.19041/win-x86": {}
+  },
+  "libraries": {},
+  "projectFileDependencyGroups": {
+    "net8.0-windows10.0.19041": [
+      "Microsoft.Web.WebView2 >= 1.*",
+      "Microsoft.Windows.SDK.BuildTools >= 10.*",
+      "Microsoft.WindowsAppSDK >= 1.*"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\Dell\\.nuget\\packages\\": {},
+    "D:\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "D:\\projects\\Net-Vanguard\\NetVanguard.App\\NetVanguard.App.csproj",
+      "projectName": "NetVanguard.App",
+      "projectPath": "D:\\projects\\Net-Vanguard\\NetVanguard.App\\NetVanguard.App.csproj",
+      "packagesPath": "C:\\Users\\Dell\\.nuget\\packages\\",
+      "outputPath": "D:\\projects\\Net-Vanguard\\NetVanguard.App\\obj\\",
+      "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "D:\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
+      "configFilePaths": [
+        "C:\\Users\\Dell\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "net8.0-windows10.0.19041.0"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net8.0-windows10.0.19041": {
+          "targetAlias": "net8.0-windows10.0.19041.0",
+          "projectReferences": {
+            "D:\\projects\\Net-Vanguard\\NetVanguard.Core\\NetVanguard.Core.csproj": {
+              "projectPath": "D:\\projects\\Net-Vanguard\\NetVanguard.Core\\NetVanguard.Core.csproj"
+            }
+          }
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      },
+      "SdkAnalysisLevel": "9.0.300"
+    },
+    "frameworks": {
+      "net8.0-windows10.0.19041": {
+        "targetAlias": "net8.0-windows10.0.19041.0",
+        "dependencies": {
+          "Microsoft.Web.WebView2": {
+            "target": "Package",
+            "version": "[1.*, )"
+          },
+          "Microsoft.Windows.SDK.BuildTools": {
+            "target": "Package",
+            "version": "[10.*, )"
+          },
+          "Microsoft.WindowsAppSDK": {
+            "target": "Package",
+            "version": "[1.*, )"
+          }
+        },
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Runtime.win-arm64",
+            "version": "[8.0.22, 8.0.22]"
+          },
+          {
+            "name": "Microsoft.AspNetCore.App.Runtime.win-x64",
+            "version": "[8.0.22, 8.0.22]"
+          },
+          {
+            "name": "Microsoft.AspNetCore.App.Runtime.win-x86",
+            "version": "[8.0.22, 8.0.22]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Runtime.win-arm64",
+            "version": "[8.0.22, 8.0.22]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Runtime.win-x64",
+            "version": "[8.0.22, 8.0.22]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Runtime.win-x86",
+            "version": "[8.0.22, 8.0.22]"
+          },
+          {
+            "name": "Microsoft.Windows.SDK.NET.Ref",
+            "version": "[10.0.19041.57, 10.0.19041.57]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Runtime.win-arm64",
+            "version": "[8.0.22, 8.0.22]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Runtime.win-x64",
+            "version": "[8.0.22, 8.0.22]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Runtime.win-x86",
+            "version": "[8.0.22, 8.0.22]"
+          }
+        ],
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          },
+          "Microsoft.Windows.SDK.NET.Ref.Windows": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.308\\RuntimeIdentifierGraph.json"
+      }
+    },
+    "runtimes": {
+      "win-arm64": {
+        "#import": []
+      },
+      "win-x64": {
+        "#import": []
+      },
+      "win-x86": {
+        "#import": []
+      }
+    }
+  },
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Error",
+      "message": "Failed to download package 'Microsoft.WindowsAppSDK.WinUI.1.8.260204000' from 'https://api.nuget.org/v3-flatcontainer/microsoft.windowsappsdk.winui/1.8.260204000/microsoft.windowsappsdk.winui.1.8.260204000.nupkg'.\r\nThe response ended prematurely, with at least 49214096 additional bytes expected. (ResponseEnded)"
+    },
+    {
+      "code": "Undefined",
+      "level": "Error",
+      "message": "The feed 'nuget.org [https://api.nuget.org/v3/index.json]' lists package 'Microsoft.WindowsAppSDK.WinUI.1.8.260204000' but multiple attempts to download the nupkg have failed. The feed is either invalid or required packages were removed while the current operation was in progress. Verify the package exists on the feed and try again."
+    },
+    {
+      "code": "Undefined",
+      "level": "Error",
+      "message": "Failed to download package 'Microsoft.WindowsAppSDK.InteractiveExperiences.1.8.260125001' from 'https://api.nuget.org/v3-flatcontainer/microsoft.windowsappsdk.interactiveexperiences/1.8.260125001/microsoft.windowsappsdk.interactiveexperiences.1.8.260125001.nupkg'.\r\nThe response ended prematurely, with at least 8009528 additional bytes expected. (ResponseEnded)"
+    },
+    {
+      "code": "Undefined",
+      "level": "Error",
+      "message": "The feed 'nuget.org [https://api.nuget.org/v3/index.json]' lists package 'Microsoft.WindowsAppSDK.InteractiveExperiences.1.8.260125001' but multiple attempts to download the nupkg have failed. The feed is either invalid or required packages were removed while the current operation was in progress. Verify the package exists on the feed and try again."
+    },
+    {
+      "code": "Undefined",
+      "level": "Error",
+      "message": "The feed 'nuget.org [https://api.nuget.org/v3/index.json]' lists package 'Microsoft.WindowsAppSDK.InteractiveExperiences.1.8.260125001' but multiple attempts to download the nupkg have failed. The feed is either invalid or required packages were removed while the current operation was in progress. Verify the package exists on the feed and try again."
+    }
+  ]
+}
