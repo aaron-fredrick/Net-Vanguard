@@ -123,6 +123,11 @@ namespace NetVanguard.Core.Models
 
         public long? BandwidthLimitKbps { get; set; }
 
+        public long LifetimeTotalBytesSent { get; set; }
+        public long LifetimeTotalBytesReceived { get; set; }
+        public long LifetimeMaxBytesSent { get; set; }
+        public long LifetimeMaxBytesReceived { get; set; }
+
         public string DisplayBytesReceived => FormatTraffic(BytesReceived);
         public string DisplayBytesSent => FormatTraffic(BytesSent);
 
@@ -197,6 +202,7 @@ namespace NetVanguard.Core.Models
         }
 
         public System.Collections.Generic.List<string> EngagingProcesses { get; set; } = new();
+        public System.Collections.Generic.List<string> DnsRecords { get; set; } = new();
 
         private long _bytesSent;
         public long BytesSent
@@ -252,13 +258,4 @@ namespace NetVanguard.Core.Models
         public LimitTargetType TargetType { get; set; }
         public string TargetName { get; set; } = string.Empty;
         public long? DataQuotaBytes { get; set; }
-        public long? ThrottleLimitBps { get; set; }
-        
-        private long _totalBytesBlocked;
-        public long TotalBytesBlocked
-        {
-            get => _totalBytesBlocked;
-            set => SetProperty(ref _totalBytesBlocked, value);
-        }
-    }
-}
+        public long? ThrottleLimitBps

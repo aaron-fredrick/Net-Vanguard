@@ -159,6 +159,15 @@ namespace NetVanguard.App.ViewModels
         public string DomainDetailName => SelectedDomain?.DomainName ?? string.Empty;
         public string DomainDetailIp => SelectedDomain?.RemoteIp ?? string.Empty;
         public List<string> DomainDetailApps => SelectedDomain?.EngagingProcesses ?? new();
+        public List<string> DomainDetailDns => SelectedDomain?.DnsRecords ?? new();
+
+        public string AppDetailQuota => SelectedApplication?.DataQuotaBytes.HasValue == true 
+            ? NetworkApplication.FormatTraffic(SelectedApplication.DataQuotaBytes.Value) 
+            : "Unlimited";
+            
+        public string AppDetailThrottle => SelectedApplication?.ThrottleLimitBps.HasValue == true 
+            ? $"{SelectedApplication.ThrottleLimitBps.Value / 1024.0:F1} KB/s" 
+            : "Full Speed";
 
         private ISeries[] _trafficSeries = Array.Empty<ISeries>();
         public ISeries[] TrafficSeries

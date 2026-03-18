@@ -15,6 +15,7 @@
     <Page.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <converters:BoolToAccentConverter x:Key="BoolToAccentConverter"/>
+        <converters:IntToVisibilityConverter x:Key="IntToVisibilityConverter"/>
     </Page.Resources>
     <Grid Padding="24">
         <Grid.RowDefinitions>
@@ -193,9 +194,6 @@
                                         <TextBlock Grid.Column="1" Text="{x:Bind DisplayBytesReceived, Mode=OneWay}" VerticalAlignment="Center"/>
                                         <TextBlock Grid.Column="2" Text="{x:Bind DisplayBytesSent, Mode=OneWay}" VerticalAlignment="Center"/>
                                         <TextBlock Grid.Column="3" Text="{x:Bind LastSeen, Mode=OneWay}" FontSize="11" Foreground="Gray" VerticalAlignment="Center" Width="100"/>
-                                        <Button Grid.Column="4" Background="Transparent" BorderThickness="0" Padding="8" ToolTipService.ToolTip="Set Limit" Click="SetLimit_Click" VerticalAlignment="Center">
-                                            <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE713;" FontSize="14" Foreground="Gray"/>
-                                        </Button>
                                     </Grid>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
@@ -267,6 +265,25 @@
                                 
                                 <Border Background="{ThemeResource SystemControlBackgroundAltHighBrush}" CornerRadius="4" Padding="12">
                                     <StackPanel Spacing="8">
+                                        <Grid>
+                                            <TextBlock Text="Traffic Limits" FontWeight="SemiBold" FontSize="12" VerticalAlignment="Center"/>
+                                            <Button HorizontalAlignment="Right" Content="Set Limits" FontSize="11" Padding="8,2" Click="SetLimit_Click" DataContext="{x:Bind ViewModel.SelectedApplication, Mode=OneWay}"/>
+                                        </Grid>
+                                        <StackPanel Orientation="Horizontal" Spacing="20">
+                                            <StackPanel>
+                                                <TextBlock Text="Quota" FontSize="10" Foreground="Gray"/>
+                                                <TextBlock Text="{x:Bind ViewModel.AppDetailQuota, Mode=OneWay}" FontSize="12"/>
+                                            </StackPanel>
+                                            <StackPanel>
+                                                <TextBlock Text="Throttle" FontSize="10" Foreground="Gray"/>
+                                                <TextBlock Text="{x:Bind ViewModel.AppDetailThrottle, Mode=OneWay}" FontSize="12"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+
+                                <Border Background="{ThemeResource SystemControlBackgroundAltHighBrush}" CornerRadius="4" Padding="12">
+                                    <StackPanel Spacing="8">
                                         <TextBlock Text="Engaging Domains" FontWeight="SemiBold" FontSize="12"/>
                                         <ItemsControl ItemsSource="{x:Bind ViewModel.AppDetailDomains, Mode=OneWay}">
                                             <ItemsControl.ItemTemplate>
@@ -291,6 +308,21 @@
                                     <TextBlock Text="{x:Bind ViewModel.DomainDetailName, Mode=OneWay}" FontSize="20" FontWeight="Bold"/>
                                     <TextBlock Text="{x:Bind ViewModel.DomainDetailIp, Mode=OneWay}" FontSize="12" Foreground="{ThemeResource SystemAccentColor}"/>
                                 </StackPanel>
+
+                                <Border Background="{ThemeResource SystemControlBackgroundAltHighBrush}" CornerRadius="4" Padding="12">
+                                    <StackPanel Spacing="8">
+                                        <TextBlock Text="DNS Metadata" FontWeight="SemiBold" FontSize="12"/>
+                                        <ItemsControl ItemsSource="{x:Bind ViewModel.DomainDetailDns, Mode=OneWay}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding}" FontSize="11" Foreground="Gray" Margin="0,1"/>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                        <TextBlock Text="No additional records found" FontSize="11" Foreground="Gray" FontStyle="Italic"
+                                                   Visibility="{x:Bind ViewModel.DomainDetailDns.Count, Mode=OneWay, Converter={StaticResource IntToVisibilityConverter}, ConverterParameter='Invert'}"/>
+                                    </StackPanel>
+                                </Border>
 
                                 <Border Background="{ThemeResource SystemControlBackgroundAltHighBrush}" CornerRadius="4" Padding="12">
                                     <StackPanel Spacing="8">

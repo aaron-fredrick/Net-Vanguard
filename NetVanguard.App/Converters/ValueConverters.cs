@@ -53,4 +53,21 @@ namespace NetVanguard.App.Converters
             throw new NotImplementedException();
         }
     }
+    public class IntToVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            bool invert = parameter?.ToString() == "Invert";
+            bool isVisible = value is int i && i > 0;
+            
+            if (invert) isVisible = !isVisible;
+            
+            return isVisible ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

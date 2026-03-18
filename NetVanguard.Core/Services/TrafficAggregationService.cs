@@ -175,6 +175,10 @@ namespace NetVanguard.Core.Services
                             try {
                                 var host = await Dns.GetHostEntryAsync(ip);
                                 d.DomainName = host.HostName;
+                                // Capture reversed DNS records
+                                d.DnsRecords.Clear();
+                                if (host.Aliases.Length > 0) d.DnsRecords.AddRange(host.Aliases);
+                                foreach (var address in host.AddressList) d.DnsRecords.Add($"IP: {address}");
                             } catch { 
                                 d.DomainName = ip;
                             }
