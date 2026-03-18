@@ -9,6 +9,7 @@
     xmlns:models="using:NetVanguard.Core.Models"
     xmlns:converters="using:NetVanguard.App.Converters"
     xmlns:lvc="using:LiveChartsCore.SkiaSharpView.WinUI"
+    xmlns:helpers="using:NetVanguard.App.Helpers"
     mc:Ignorable="d" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Page.Resources>
@@ -57,13 +58,13 @@
                     
                     <!-- View Switcher -->
                     <StackPanel Orientation="Horizontal" Background="{ThemeResource SystemControlBackgroundAltMediumBrush}" Padding="4" CornerRadius="4">
-                        <Button Content="Process" Command="{x:Bind ViewModel.SwitchViewCommand}" CommandParameter="Process" 
+                        <Button helpers:CursorExtensions.Cursor="Hand" Content="Process" Command="{x:Bind ViewModel.SwitchViewCommand}" CommandParameter="Process" 
                                 Background="{x:Bind ViewModel.IsProcessView, Mode=OneWay, Converter={StaticResource BoolToAccentConverter}}" Padding="12,4"/>
-                        <Button Content="Detailed" Command="{x:Bind ViewModel.SwitchViewCommand}" CommandParameter="Detailed" 
+                        <Button helpers:CursorExtensions.Cursor="Hand" Content="Detailed" Command="{x:Bind ViewModel.SwitchViewCommand}" CommandParameter="Detailed" 
                                 Background="{x:Bind ViewModel.IsDetailedView, Mode=OneWay, Converter={StaticResource BoolToAccentConverter}}" Padding="12,4"/>
-                        <Button Content="Adapter" Command="{x:Bind ViewModel.SwitchViewCommand}" CommandParameter="Adapter" 
+                        <Button helpers:CursorExtensions.Cursor="Hand" Content="Adapter" Command="{x:Bind ViewModel.SwitchViewCommand}" CommandParameter="Adapter" 
                                 Background="{x:Bind ViewModel.IsAdapterView, Mode=OneWay, Converter={StaticResource BoolToAccentConverter}}" Padding="12,4"/>
-                        <Button Content="Domain" Command="{x:Bind ViewModel.SwitchViewCommand}" CommandParameter="Domain" 
+                        <Button helpers:CursorExtensions.Cursor="Hand" Content="Domain" Command="{x:Bind ViewModel.SwitchViewCommand}" CommandParameter="Domain" 
                                 Background="{x:Bind ViewModel.IsDomainView, Mode=OneWay, Converter={StaticResource BoolToAccentConverter}}" Padding="12,4"/>
                     </StackPanel>
                 </StackPanel>
@@ -77,25 +78,25 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Background="{x:Bind ViewModel.SortBrushName, Mode=OneWay}" Command="{x:Bind ViewModel.ToggleSortCommand}" CommandParameter="Name">
+                    <Button helpers:CursorExtensions.Cursor="Hand" Grid.Column="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Background="{x:Bind ViewModel.SortBrushName, Mode=OneWay}" Command="{x:Bind ViewModel.ToggleSortCommand}" CommandParameter="Name">
                         <StackPanel Orientation="Horizontal" Spacing="8">
                             <TextBlock Text="Process" FontWeight="SemiBold"/>
                             <TextBlock Text="{x:Bind ViewModel.SortArrowName, Mode=OneWay}" Foreground="{ThemeResource SystemAccentColor}"/>
                         </StackPanel>
                     </Button>
-                    <Button Grid.Column="1" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Background="{x:Bind ViewModel.SortBrushDownload, Mode=OneWay}" Command="{x:Bind ViewModel.ToggleSortCommand}" CommandParameter="Download">
+                    <Button helpers:CursorExtensions.Cursor="Hand" Grid.Column="1" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Background="{x:Bind ViewModel.SortBrushDownload, Mode=OneWay}" Command="{x:Bind ViewModel.ToggleSortCommand}" CommandParameter="Download">
                         <StackPanel Orientation="Horizontal" Spacing="8">
                             <TextBlock Text="Download" FontWeight="SemiBold"/>
                             <TextBlock Text="{x:Bind ViewModel.SortArrowDownload, Mode=OneWay}" Foreground="{ThemeResource SystemAccentColor}"/>
                         </StackPanel>
                     </Button>
-                    <Button Grid.Column="2" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Background="{x:Bind ViewModel.SortBrushUpload, Mode=OneWay}" Command="{x:Bind ViewModel.ToggleSortCommand}" CommandParameter="Upload">
+                    <Button helpers:CursorExtensions.Cursor="Hand" Grid.Column="2" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Background="{x:Bind ViewModel.SortBrushUpload, Mode=OneWay}" Command="{x:Bind ViewModel.ToggleSortCommand}" CommandParameter="Upload">
                         <StackPanel Orientation="Horizontal" Spacing="8">
                             <TextBlock Text="Upload" FontWeight="SemiBold"/>
                             <TextBlock Text="{x:Bind ViewModel.SortArrowUpload, Mode=OneWay}" Foreground="{ThemeResource SystemAccentColor}"/>
                         </StackPanel>
                     </Button>
-                    <Button Grid.Column="3" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Background="{x:Bind ViewModel.SortBrushActivity, Mode=OneWay}" Command="{x:Bind ViewModel.ToggleSortCommand}" CommandParameter="Activity" Width="100">
+                    <Button helpers:CursorExtensions.Cursor="Hand" Grid.Column="3" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Background="{x:Bind ViewModel.SortBrushActivity, Mode=OneWay}" Command="{x:Bind ViewModel.ToggleSortCommand}" CommandParameter="Activity" Width="100">
                         <StackPanel Orientation="Horizontal" Spacing="8">
                             <TextBlock Text="Activity" FontWeight="SemiBold"/>
                             <TextBlock Text="{x:Bind ViewModel.SortArrowActivity, Mode=OneWay}" Foreground="{ThemeResource SystemAccentColor}"/>
@@ -111,19 +112,19 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Background="{x:Bind ViewModel.SortBrushName, Mode=OneWay}" Command="{x:Bind ViewModel.ToggleSortCommand}" CommandParameter="Name">
+                    <Button helpers:CursorExtensions.Cursor="Hand" Grid.Column="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Background="{x:Bind ViewModel.SortBrushName, Mode=OneWay}" Command="{x:Bind ViewModel.ToggleSortCommand}" CommandParameter="Name">
                         <StackPanel Orientation="Horizontal" Spacing="8">
                             <TextBlock Text="Adapter" FontWeight="SemiBold"/>
                             <TextBlock Text="{x:Bind ViewModel.SortArrowName, Mode=OneWay}" Foreground="{ThemeResource SystemAccentColor}"/>
                         </StackPanel>
                     </Button>
-                    <Button Grid.Column="1" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Background="{x:Bind ViewModel.SortBrushDownload, Mode=OneWay}" Command="{x:Bind ViewModel.ToggleSortCommand}" CommandParameter="Download">
+                    <Button helpers:CursorExtensions.Cursor="Hand" Grid.Column="1" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Background="{x:Bind ViewModel.SortBrushDownload, Mode=OneWay}" Command="{x:Bind ViewModel.ToggleSortCommand}" CommandParameter="Download">
                         <StackPanel Orientation="Horizontal" Spacing="8">
                             <TextBlock Text="Download" FontWeight="SemiBold"/>
                             <TextBlock Text="{x:Bind ViewModel.SortArrowDownload, Mode=OneWay}" Foreground="{ThemeResource SystemAccentColor}"/>
                         </StackPanel>
                     </Button>
-                    <Button Grid.Column="2" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Background="{x:Bind ViewModel.SortBrushUpload, Mode=OneWay}" Command="{x:Bind ViewModel.ToggleSortCommand}" CommandParameter="Upload">
+                    <Button helpers:CursorExtensions.Cursor="Hand" Grid.Column="2" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Background="{x:Bind ViewModel.SortBrushUpload, Mode=OneWay}" Command="{x:Bind ViewModel.ToggleSortCommand}" CommandParameter="Upload">
                         <StackPanel Orientation="Horizontal" Spacing="8">
                             <TextBlock Text="Upload" FontWeight="SemiBold"/>
                             <TextBlock Text="{x:Bind ViewModel.SortArrowUpload, Mode=OneWay}" Foreground="{ThemeResource SystemAccentColor}"/>
@@ -139,19 +140,19 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Background="{x:Bind ViewModel.SortBrushDomain, Mode=OneWay}" Command="{x:Bind ViewModel.ToggleSortCommand}" CommandParameter="Domain">
+                    <Button helpers:CursorExtensions.Cursor="Hand" Grid.Column="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Background="{x:Bind ViewModel.SortBrushDomain, Mode=OneWay}" Command="{x:Bind ViewModel.ToggleSortCommand}" CommandParameter="Domain">
                         <StackPanel Orientation="Horizontal" Spacing="8">
                             <TextBlock Text="Domain / IP" FontWeight="SemiBold"/>
                             <TextBlock Text="{x:Bind ViewModel.SortArrowDomain, Mode=OneWay}" Foreground="{ThemeResource SystemAccentColor}"/>
                         </StackPanel>
                     </Button>
-                    <Button Grid.Column="1" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Background="{x:Bind ViewModel.SortBrushDownload, Mode=OneWay}" Command="{x:Bind ViewModel.ToggleSortCommand}" CommandParameter="Download">
+                    <Button helpers:CursorExtensions.Cursor="Hand" Grid.Column="1" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Background="{x:Bind ViewModel.SortBrushDownload, Mode=OneWay}" Command="{x:Bind ViewModel.ToggleSortCommand}" CommandParameter="Download">
                         <StackPanel Orientation="Horizontal" Spacing="8">
                             <TextBlock Text="Download" FontWeight="SemiBold"/>
                             <TextBlock Text="{x:Bind ViewModel.SortArrowDownload, Mode=OneWay}" Foreground="{ThemeResource SystemAccentColor}"/>
                         </StackPanel>
                     </Button>
-                    <Button Grid.Column="2" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Background="{x:Bind ViewModel.SortBrushUpload, Mode=OneWay}" Command="{x:Bind ViewModel.ToggleSortCommand}" CommandParameter="Upload">
+                    <Button helpers:CursorExtensions.Cursor="Hand" Grid.Column="2" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Background="{x:Bind ViewModel.SortBrushUpload, Mode=OneWay}" Command="{x:Bind ViewModel.ToggleSortCommand}" CommandParameter="Upload">
                         <StackPanel Orientation="Horizontal" Spacing="8">
                             <TextBlock Text="Upload" FontWeight="SemiBold"/>
                             <TextBlock Text="{x:Bind ViewModel.SortArrowUpload, Mode=OneWay}" Foreground="{ThemeResource SystemAccentColor}"/>

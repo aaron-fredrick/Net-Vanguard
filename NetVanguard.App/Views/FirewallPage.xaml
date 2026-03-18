@@ -5,6 +5,7 @@
     xmlns:local="using:NetVanguard.App.Views"
     xmlns:converters="using:NetVanguard.App.Converters"
     xmlns:models="using:NetVanguard.Core.Models"
+    xmlns:helpers="using:NetVanguard.App.Helpers"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Page.Resources>
@@ -36,9 +37,9 @@
 
                 <TextBlock Grid.Column="3" Text="{x:Bind Direction, Mode=OneWay}" VerticalAlignment="Center" FontSize="13"/>
 
-                <CheckBox Grid.Column="4" IsChecked="{x:Bind Enabled, Mode=OneWay}" Content="Enabled" Command="{Binding ElementName=LayoutRoot, Path=DataContext.ToggleRuleCommand}" CommandParameter="{Binding}" Margin="10,0" VerticalAlignment="Center"/>
+                <CheckBox Grid.Column="4" IsChecked="{x:Bind Enabled, Mode=OneWay}" Content="Enabled" Command="{Binding ElementName=LayoutRoot, Path=DataContext.ToggleRuleCommand}" CommandParameter="{Binding}" helpers:CursorExtensions.Cursor="Hand" Margin="10,0" VerticalAlignment="Center"/>
 
-                <Button Grid.Column="5" Content="Delete" Command="{Binding ElementName=LayoutRoot, Path=DataContext.DeleteRuleCommand}" CommandParameter="{Binding}" Background="Transparent" Foreground="Red" VerticalAlignment="Center"/>
+                <Button Grid.Column="5" Content="Delete" Command="{Binding ElementName=LayoutRoot, Path=DataContext.DeleteRuleCommand}" CommandParameter="{Binding}" helpers:CursorExtensions.Cursor="Hand" Background="Transparent" Foreground="Red" VerticalAlignment="Center"/>
             </Grid>
         </DataTemplate>
     </Page.Resources>
@@ -51,8 +52,8 @@
 
         <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="16" Margin="0,0,0,20">
             <TextBlock Text="Windows Firewall Rules" Style="{StaticResource TitleTextBlockStyle}" VerticalAlignment="Center"/>
-            <Button Content="Refresh" Command="{x:Bind ViewModel.LoadRulesCommand}" VerticalAlignment="Center"/>
-            <Button Content="Add New Rule" Click="AddNewRule_Click" VerticalAlignment="Center" Style="{StaticResource AccentButtonStyle}"/>
+            <Button Content="Refresh" Command="{x:Bind ViewModel.LoadRulesCommand}" helpers:CursorExtensions.Cursor="Hand" VerticalAlignment="Center"/>
+            <Button Content="Add New Rule" Click="AddNewRule_Click" helpers:CursorExtensions.Cursor="Hand" VerticalAlignment="Center" Style="{StaticResource AccentButtonStyle}"/>
             <ProgressRing IsActive="{x:Bind ViewModel.IsLoading, Mode=OneWay}" VerticalAlignment="Center" Margin="10,0,0,0" Width="20" Height="20"/>
         </StackPanel>
 
