@@ -50,3 +50,11 @@ Contributions are heavily encouraged! Please review our [Contributing Guidelines
 
 ## 📜 License & Security
 This project is licensed under the **PolyForm Noncommercial 1.0.0** License to prevent strict commercialization. For deep vulnerability reporting instructions, please review our [Security Policy](SECURITY.md).
+
+---
+
+## 💖 Support the Project
+If you find Net-Vanguard useful, please consider supporting its development:
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/X8X21W8ONN)
+
