@@ -39,6 +39,12 @@ namespace NetVanguard.App.Views
                             ContentFrame.Navigate(typeof(DashboardPage));
                         }
                         break;
+                    case "Limits":
+                        if (ContentFrame.CurrentSourcePageType != typeof(LimitsPage))
+                        {
+                            ContentFrame.Navigate(typeof(LimitsPage));
+                        }
+                        break;
                     case "Firewall":
                         if (ContentFrame.CurrentSourcePageType != typeof(FirewallPage))
                         {

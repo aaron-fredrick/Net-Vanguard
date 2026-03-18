@@ -13,6 +13,11 @@
                         <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE80F;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
+                <NavigationViewItem Tag="Limits" Content="Network Limits">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE81D;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
                 <NavigationViewItem Tag="Firewall" Content="Firewall Rules">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE773;"/>

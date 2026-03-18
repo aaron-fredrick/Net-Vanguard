@@ -14,7 +14,9 @@ namespace NetVanguard.Core.Services
         private readonly ConcurrentDictionary<string, AdapterTraffic> _trackedAdapters = new();
         private readonly ConcurrentDictionary<string, DomainTraffic> _trackedDomains = new();
         private readonly Dictionary<IPAddress, string> _ipToAdapterMap = new();
-        private readonly ConcurrentDictionary<string, (long? QuotaBytes, long? ThrottleBps)> _appLimits = new();
+        private readonly ConcurrentDictionary<string, TrafficLimitConfiguration> _activeLimits = new();
+        
+        private string GetLimitKey(LimitTargetType type, string targetName) => $"{type}:{targetName.ToLowerInvariant()}";
         
         private CancellationTokenSource? _cancellationTokenSource;
 
@@ -56,16 +58,38 @@ namespace NetVanguard.Core.Services
             _etwMonitor.StopMonitoring();
         }
 
-        public void SetApplicationLimit(string processName, long? dataQuotaBytes, long? throttleLimitBps)
+        public void SetLimit(TrafficLimitConfiguration config)
         {
-            _appLimits[processName] = (dataQuotaBytes, throttleLimitBps);
+            var key = GetLimitKey(config.TargetType, config.TargetName);
+            _activeLimits[key] = config;
 
-            foreach (var app in _trackedApplications.Values)
+            if (config.TargetType == LimitTargetType.Process)
             {
-                if (string.Equals(app.ProcessName, processName, StringComparison.OrdinalIgnoreCase))
+                foreach (var application in _trackedApplications.Values)
                 {
-                    app.DataQuotaBytes = dataQuotaBytes;
-                    app.ThrottleLimitBps = throttleLimitBps;
+                    if (string.Equals(application.ProcessName, config.TargetName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        application.DataQuotaBytes = config.DataQuotaBytes;
+                        application.ThrottleLimitBps = config.ThrottleLimitBps;
+                    }
+                }
+            }
+        }
+
+        public IEnumerable<TrafficLimitConfiguration> GetLimits() => _activeLimits.Values;
+
+        public void DeleteLimit(LimitTargetType type, string targetName)
+        {
+            _activeLimits.TryRemove(GetLimitKey(type, targetName), out _);
+            if (type == LimitTargetType.Process)
+            {
+                foreach (var application in _trackedApplications.Values)
+                {
+                    if (string.Equals(application.ProcessName, targetName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        application.DataQuotaBytes = null;
+                        application.ThrottleLimitBps = null;
+                    }
                 }
             }
         }
@@ -114,10 +138,10 @@ namespace NetVanguard.Core.Services
                     pid => 
                     {
                         var newApp = _processMapper.GetOrResolveApplication(pid);
-                        if (_appLimits.TryGetValue(newApp.ProcessName, out var limit))
+                        if (_activeLimits.TryGetValue(GetLimitKey(LimitTargetType.Process, newApp.ProcessName), out var limit))
                         {
-                            newApp.DataQuotaBytes = limit.QuotaBytes;
-                            newApp.ThrottleLimitBps = limit.ThrottleBps;
+                            newApp.DataQuotaBytes = limit.DataQuotaBytes;
+                            newApp.ThrottleLimitBps = limit.ThrottleLimitBps;
                         }
                         return newApp;
                     });
@@ -147,13 +171,12 @@ namespace NetVanguard.Core.Services
                 {
                     var domain = _trackedDomains.GetOrAdd(remoteIp, ip => {
                         var d = new DomainTraffic { RemoteIp = ip };
-                        // Try resolve DNS in background
                         Task.Run(async () => {
                             try {
                                 var host = await Dns.GetHostEntryAsync(ip);
                                 d.DomainName = host.HostName;
                             } catch { 
-                                d.DomainName = ip; // Fallback to IP
+                                d.DomainName = ip;
                             }
                         });
                         return d;
@@ -161,6 +184,11 @@ namespace NetVanguard.Core.Services
                     
                     if (traffic_event.IsReceive) domain.BytesReceived += traffic_event.Size;
                     else domain.BytesSent += traffic_event.Size;
+
+                    // Cross-Relational Linkage
+                    string linkId = domain.DomainName != "Resolving..." ? domain.DomainName : domain.RemoteIp;
+                    if (!app.ConnectedDomains.Contains(linkId)) app.ConnectedDomains.Add(linkId);
+                    if (!domain.EngagingProcesses.Contains(app.ProcessName)) domain.EngagingProcesses.Add(app.ProcessName);
                 }
             }
 

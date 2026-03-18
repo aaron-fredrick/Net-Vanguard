@@ -6,7 +6,9 @@ namespace NetVanguard.Core.Models
         AddRule,
         SetRuleEnabled,
         DeleteRule,
-        SetLimit
+        SetLimit,
+        GetLimits,
+        DeleteLimit
     }
 
     public class CommandMessage

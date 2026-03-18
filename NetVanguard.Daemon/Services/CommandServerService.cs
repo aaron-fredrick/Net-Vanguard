@@ -101,7 +101,27 @@ namespace NetVanguard.Daemon.Services
                     case CommandType.SetLimit:
                         if (string.IsNullOrWhiteSpace(request.Payload)) throw new ArgumentException("Payload is empty.");
                         var limitCmd = JsonSerializer.Deserialize<SetLimitPayload>(request.Payload);
-                        if (limitCmd != null) _trafficAggregationService.SetApplicationLimit(limitCmd.ProcessName, limitCmd.DataQuotaBytes, limitCmd.ThrottleLimitBps);
+                        if (limitCmd != null) 
+                        {
+                            _trafficAggregationService.SetLimit(new TrafficLimitConfiguration 
+                            { 
+                                TargetType = limitCmd.TargetType, 
+                                TargetName = limitCmd.TargetName, 
+                                DataQuotaBytes = limitCmd.DataQuotaBytes, 
+                                ThrottleLimitBps = limitCmd.ThrottleLimitBps 
+                            });
+                        }
+                        break;
+                        
+                    case CommandType.GetLimits:
+                        var limits = _trafficAggregationService.GetLimits();
+                        response.Payload = JsonSerializer.Serialize(limits);
+                        break;
+                        
+                    case CommandType.DeleteLimit:
+                        if (string.IsNullOrWhiteSpace(request.Payload)) throw new ArgumentException("Payload is empty.");
+                        var delCmd = JsonSerializer.Deserialize<DeleteLimitPayload>(request.Payload);
+                        if (delCmd != null) _trafficAggregationService.DeleteLimit(delCmd.TargetType, delCmd.TargetName);
                         break;
 
                     default:
@@ -128,9 +148,16 @@ namespace NetVanguard.Daemon.Services
 
         public class SetLimitPayload
         {
-            public string ProcessName { get; set; } = string.Empty;
+            public NetVanguard.Core.Models.LimitTargetType TargetType { get; set; }
+            public string TargetName { get; set; } = string.Empty;
             public long? DataQuotaBytes { get; set; }
             public long? ThrottleLimitBps { get; set; }
+        }
+        
+        public class DeleteLimitPayload
+        {
+            public NetVanguard.Core.Models.LimitTargetType TargetType { get; set; }
+            public string TargetName { get; set; } = string.Empty;
         }
     }
 }

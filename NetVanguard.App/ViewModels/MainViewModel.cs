@@ -110,6 +110,55 @@ namespace NetVanguard.App.ViewModels
             set => SetProperty(ref _domainTraffic, value);
         }
 
+        private NetworkApplication? _selectedApplication;
+        public NetworkApplication? SelectedApplication
+        {
+            get => _selectedApplication;
+            set
+            {
+                if (SetProperty(ref _selectedApplication, value))
+                {
+                    OnPropertyChanged(nameof(IsAppDetailVisible));
+                    OnPropertyChanged(nameof(IsDetailPaneVisible));
+                    OnPropertyChanged(nameof(AppDetailName));
+                    OnPropertyChanged(nameof(AppDetailPath));
+                    OnPropertyChanged(nameof(AppDetailDomains));
+                    if (value != null) SelectedDomain = null; // Mutually exclusive
+                }
+            }
+        }
+
+        private DomainTraffic? _selectedDomain;
+        public DomainTraffic? SelectedDomain
+        {
+            get => _selectedDomain;
+            set
+            {
+                if (SetProperty(ref _selectedDomain, value))
+                {
+                    OnPropertyChanged(nameof(IsDomainDetailVisible));
+                    OnPropertyChanged(nameof(IsDetailPaneVisible));
+                    OnPropertyChanged(nameof(DomainDetailName));
+                    OnPropertyChanged(nameof(DomainDetailIp));
+                    OnPropertyChanged(nameof(DomainDetailApps));
+                    if (value != null) SelectedApplication = null; // Mutually exclusive
+                }
+            }
+        }
+
+        public bool IsAppDetailVisible => SelectedApplication != null;
+        public bool IsDomainDetailVisible => SelectedDomain != null;
+        public bool IsDetailPaneVisible => IsAppDetailVisible || IsDomainDetailVisible;
+
+        // Safe Bind Proxies for Detail Pane
+        public string AppDetailName => SelectedApplication?.ProcessName ?? string.Empty;
+        public string AppDetailPath => SelectedApplication?.ExecutablePath ?? string.Empty;
+        public List<string> AppDetailDomains => SelectedApplication?.ConnectedDomains ?? new();
+
+        public string DomainDetailName => SelectedDomain?.DomainName ?? string.Empty;
+        public string DomainDetailIp => SelectedDomain?.RemoteIp ?? string.Empty;
+        public List<string> DomainDetailApps => SelectedDomain?.EngagingProcesses ?? new();
+
         private ISeries[] _trafficSeries = Array.Empty<ISeries>();
         public ISeries[] TrafficSeries
         {
@@ -333,6 +382,8 @@ namespace NetVanguard.App.ViewModels
                 target.BytesSent = source.BytesSent;
                 target.LastSeen = source.LastSeen;
                 target.ProcessName = source.ProcessName;
+                target.ConnectedDomains = source.ConnectedDomains;
+                if (SelectedApplication?.ProcessId == target.ProcessId) OnPropertyChanged(nameof(SelectedApplication));
             });
         }
 
@@ -365,6 +416,8 @@ namespace NetVanguard.App.ViewModels
                 target.BytesReceived = source.BytesReceived;
                 target.BytesSent = source.BytesSent;
                 target.DomainName = source.DomainName;
+                target.EngagingProcesses = source.EngagingProcesses;
+                if (SelectedDomain?.RemoteIp == target.RemoteIp) OnPropertyChanged(nameof(SelectedDomain));
             });
         }
 
@@ -377,7 +430,10 @@ namespace NetVanguard.App.ViewModels
                 {
                     if (!newList.Any(n => identityMatch(n, current[i])))
                     {
+                        var dropped = current[i];
                         current.RemoveAt(i);
+                        if (ReferenceEquals(SelectedApplication, dropped)) SelectedApplication = null;
+                        if (ReferenceEquals(SelectedDomain, dropped)) SelectedDomain = null;
                     }
                 }
 

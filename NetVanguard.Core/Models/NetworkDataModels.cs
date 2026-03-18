@@ -58,6 +58,8 @@ namespace NetVanguard.Core.Models
             set => SetProperty(ref _executablePath, value);
         }
 
+        public System.Collections.Generic.List<string> ConnectedDomains { get; set; } = new();
+
         private bool _isWindowsService;
         public bool IsWindowsService
         {
@@ -194,6 +196,8 @@ namespace NetVanguard.Core.Models
             set => SetProperty(ref _remoteIp, value);
         }
 
+        public System.Collections.Generic.List<string> EngagingProcesses { get; set; } = new();
+
         private long _bytesSent;
         public long BytesSent
         {
@@ -234,5 +238,27 @@ namespace NetVanguard.Core.Models
         public int OwningProcessId { get; set; }
         public long CurrentDownloadSpeedBps { get; set; }
         public long CurrentUploadSpeedBps { get; set; }
+    }
+
+    public enum LimitTargetType
+    {
+        Process,
+        Domain,
+        Adapter
+    }
+
+    public partial class TrafficLimitConfiguration : ObservableObject
+    {
+        public LimitTargetType TargetType { get; set; }
+        public string TargetName { get; set; } = string.Empty;
+        public long? DataQuotaBytes { get; set; }
+        public long? ThrottleLimitBps { get; set; }
+        
+        private long _totalBytesBlocked;
+        public long TotalBytesBlocked
+        {
+            get => _totalBytesBlocked;
+            set => SetProperty(ref _totalBytesBlocked, value);
+        }
     }
 }
