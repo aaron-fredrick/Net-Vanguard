@@ -14,6 +14,7 @@
 
     <Page.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <converters:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
         <converters:BoolToAccentConverter x:Key="BoolToAccentConverter"/>
         <converters:IntToVisibilityConverter x:Key="IntToVisibilityConverter"/>
     </Page.Resources>
@@ -283,6 +284,41 @@
                                 </Border>
 
                                 <Border Background="{ThemeResource SystemControlBackgroundAltHighBrush}" CornerRadius="4" Padding="12">
+                                    <Grid>
+                                        <StackPanel Spacing="8" Visibility="{x:Bind ViewModel.IsAppStatsLoading, Mode=OneWay, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                                            <TextBlock Text="Lifetime Statistics" FontWeight="SemiBold" FontSize="12"/>
+                                            <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto" RowSpacing="6" ColumnSpacing="12">
+                                                <!-- Total Row -->
+                                                <FontIcon Grid.Row="0" Grid.Column="0" Glyph="&#xE8B7;" FontSize="14" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" ToolTipService.ToolTip="Lifetime Total Traffic"/>
+                                                <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Spacing="4">
+                                                    <TextBlock Text="Total:" FontSize="10" Foreground="Gray" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="{x:Bind ViewModel.AppLifeTotal, Mode=OneWay}" FontSize="11" VerticalAlignment="Center"/>
+                                                </StackPanel>
+
+                                                <!-- Peak Row -->
+                                                <FontIcon Grid.Row="1" Grid.Column="0" Glyph="&#xE81D;" FontSize="14" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" ToolTipService.ToolTip="Lifetime Peak Speed"/>
+                                                <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Spacing="4">
+                                                    <TextBlock Text="Peak:" FontSize="10" Foreground="Gray" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="{x:Bind ViewModel.AppLifePeak, Mode=OneWay}" FontSize="11" VerticalAlignment="Center"/>
+                                                </StackPanel>
+
+                                                <!-- Blocked Row -->
+                                                <FontIcon Grid.Row="2" Grid.Column="0" Glyph="&#xE7BA;" FontSize="14" Foreground="Salmon" ToolTipService.ToolTip="Lifetime Blocked Traffic"/>
+                                                <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Spacing="4">
+                                                    <TextBlock Text="Blocked:" FontSize="10" Foreground="Gray" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="{x:Bind ViewModel.AppLifeBlocked, Mode=OneWay}" FontSize="11" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </StackPanel>
+                                        
+                                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="8" Visibility="{x:Bind ViewModel.IsAppStatsLoading, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                                            <ProgressRing Width="20" Height="20" IsActive="True"/>
+                                            <TextBlock Text="Fetching Stats..." FontSize="10" Foreground="Gray"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+
+                                <Border Background="{ThemeResource SystemControlBackgroundAltHighBrush}" CornerRadius="4" Padding="12">
                                     <StackPanel Spacing="8">
                                         <TextBlock Text="Engaging Domains" FontWeight="SemiBold" FontSize="12"/>
                                         <ItemsControl ItemsSource="{x:Bind ViewModel.AppDetailDomains, Mode=OneWay}">
@@ -322,6 +358,41 @@
                                         <TextBlock Text="No additional records found" FontSize="11" Foreground="Gray" FontStyle="Italic"
                                                    Visibility="{x:Bind ViewModel.DomainDetailDns.Count, Mode=OneWay, Converter={StaticResource IntToVisibilityConverter}, ConverterParameter='Invert'}"/>
                                     </StackPanel>
+                                </Border>
+
+                                <Border Background="{ThemeResource SystemControlBackgroundAltHighBrush}" CornerRadius="4" Padding="12">
+                                    <Grid>
+                                        <StackPanel Spacing="8" Visibility="{x:Bind ViewModel.IsDomainStatsLoading, Mode=OneWay, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                                            <TextBlock Text="Lifetime Statistics" FontWeight="SemiBold" FontSize="12"/>
+                                            <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto" RowSpacing="6" ColumnSpacing="12">
+                                                <!-- Total Row -->
+                                                <FontIcon Grid.Row="0" Grid.Column="0" Glyph="&#xE8B7;" FontSize="14" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" ToolTipService.ToolTip="Lifetime Total Traffic"/>
+                                                <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Spacing="4">
+                                                    <TextBlock Text="Total:" FontSize="10" Foreground="Gray" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="{x:Bind ViewModel.DomainLifeTotal, Mode=OneWay}" FontSize="11" VerticalAlignment="Center"/>
+                                                </StackPanel>
+
+                                                <!-- Peak Row -->
+                                                <FontIcon Grid.Row="1" Grid.Column="0" Glyph="&#xE81D;" FontSize="14" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" ToolTipService.ToolTip="Lifetime Peak Speed"/>
+                                                <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Spacing="4">
+                                                    <TextBlock Text="Peak:" FontSize="10" Foreground="Gray" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="{x:Bind ViewModel.DomainLifePeak, Mode=OneWay}" FontSize="11" VerticalAlignment="Center"/>
+                                                </StackPanel>
+
+                                                <!-- Blocked Row -->
+                                                <FontIcon Grid.Row="2" Grid.Column="0" Glyph="&#xE7BA;" FontSize="14" Foreground="Salmon" ToolTipService.ToolTip="Lifetime Blocked Traffic"/>
+                                                <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Spacing="4">
+                                                    <TextBlock Text="Blocked:" FontSize="10" Foreground="Gray" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="{x:Bind ViewModel.DomainLifeBlocked, Mode=OneWay}" FontSize="11" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </StackPanel>
+
+                                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="8" Visibility="{x:Bind ViewModel.IsDomainStatsLoading, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                                            <ProgressRing Width="20" Height="20" IsActive="True"/>
+                                            <TextBlock Text="Fetching Stats..." FontSize="10" Foreground="Gray"/>
+                                        </StackPanel>
+                                    </Grid>
                                 </Border>
 
                                 <Border Background="{ThemeResource SystemControlBackgroundAltHighBrush}" CornerRadius="4" Padding="12">

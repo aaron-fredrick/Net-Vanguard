@@ -111,6 +111,20 @@ namespace NetVanguard.App.ViewModels
             set => SetProperty(ref _domainTraffic, value);
         }
 
+        private bool _isAppStatsLoading;
+        public bool IsAppStatsLoading
+        {
+            get => _isAppStatsLoading;
+            set => SetProperty(ref _isAppStatsLoading, value);
+        }
+
+        private bool _isDomainStatsLoading;
+        public bool IsDomainStatsLoading
+        {
+            get => _isDomainStatsLoading;
+            set => SetProperty(ref _isDomainStatsLoading, value);
+        }
+
         private NetworkApplication? _selectedApplication;
         public NetworkApplication? SelectedApplication
         {
@@ -124,7 +138,15 @@ namespace NetVanguard.App.ViewModels
                     OnPropertyChanged(nameof(AppDetailName));
                     OnPropertyChanged(nameof(AppDetailPath));
                     OnPropertyChanged(nameof(AppDetailDomains));
-                    if (value != null) SelectedDomain = null; // Mutually exclusive
+                    
+                    if (value != null)
+                    {
+                        SelectedDomain = null; // Mutually exclusive
+                        // Trigger loading state if stats are currently empty/zero
+                        if (value.LifetimeTotalBytesSent == 0 && value.LifetimeTotalBytesReceived == 0)
+                            IsAppStatsLoading = true;
+                    }
+                    else IsAppStatsLoading = false;
                 }
             }
         }
@@ -142,7 +164,14 @@ namespace NetVanguard.App.ViewModels
                     OnPropertyChanged(nameof(DomainDetailName));
                     OnPropertyChanged(nameof(DomainDetailIp));
                     OnPropertyChanged(nameof(DomainDetailApps));
-                    if (value != null) SelectedApplication = null; // Mutually exclusive
+                    
+                    if (value != null)
+                    {
+                        SelectedApplication = null; // Mutually exclusive
+                        if (value.LifetimeTotalBytesSent == 0 && value.LifetimeTotalBytesReceived == 0)
+                            IsDomainStatsLoading = true;
+                    }
+                    else IsDomainStatsLoading = false;
                 }
             }
         }
@@ -168,6 +197,24 @@ namespace NetVanguard.App.ViewModels
         public string AppDetailThrottle => SelectedApplication?.ThrottleLimitBps.HasValue == true 
             ? $"{SelectedApplication.ThrottleLimitBps.Value / 1024.0:F1} KB/s" 
             : "Full Speed";
+
+        public string AppLifeTotal => SelectedApplication == null ? "0 B" 
+            : $"↓ {NetworkApplication.FormatTraffic(SelectedApplication.LifetimeTotalBytesReceived)}  ↑ {NetworkApplication.FormatTraffic(SelectedApplication.LifetimeTotalBytesSent)}";
+        
+        public string AppLifePeak => SelectedApplication == null ? "0 B" 
+            : $"↓ {NetworkApplication.FormatTraffic(SelectedApplication.LifetimeMaxBytesReceived)}/s  ↑ {NetworkApplication.FormatTraffic(SelectedApplication.LifetimeMaxBytesSent)}/s";
+
+        public string AppLifeBlocked => SelectedApplication == null ? "0 B"
+            : NetworkApplication.FormatTraffic(SelectedApplication.LifetimeTotalBytesBlocked);
+
+        public string DomainLifeTotal => SelectedDomain == null ? "0 B" 
+            : $"↓ {NetworkApplication.FormatTraffic(SelectedDomain.LifetimeTotalBytesReceived)}  ↑ {NetworkApplication.FormatTraffic(SelectedDomain.LifetimeTotalBytesSent)}";
+        
+        public string DomainLifePeak => SelectedDomain == null ? "0 B" 
+            : $"↓ {NetworkApplication.FormatTraffic(SelectedDomain.LifetimeMaxBytesReceived)}/s  ↑ {NetworkApplication.FormatTraffic(SelectedDomain.LifetimeMaxBytesSent)}/s";
+
+        public string DomainLifeBlocked => SelectedDomain == null ? "0 B"
+            : NetworkApplication.FormatTraffic(SelectedDomain.LifetimeTotalBytesBlocked);
 
         private ISeries[] _trafficSeries = Array.Empty<ISeries>();
         public ISeries[] TrafficSeries
@@ -425,7 +472,24 @@ namespace NetVanguard.App.ViewModels
                 target.LastSeen = source.LastSeen;
                 target.ProcessName = source.ProcessName;
                 target.ConnectedDomains = source.ConnectedDomains;
-                if (SelectedApplication?.ProcessId == target.ProcessId) OnPropertyChanged(nameof(SelectedApplication));
+                
+                // Copy Lifetime Stats
+                target.LifetimeTotalBytesSent = source.LifetimeTotalBytesSent;
+                target.LifetimeTotalBytesReceived = source.LifetimeTotalBytesReceived;
+                target.LifetimeMaxBytesSent = source.LifetimeMaxBytesSent;
+                target.LifetimeMaxBytesReceived = source.LifetimeMaxBytesReceived;
+                target.LifetimeTotalBytesBlocked = source.LifetimeTotalBytesBlocked;
+
+                if (SelectedApplication?.ProcessId == target.ProcessId)
+                {
+                    OnPropertyChanged(nameof(SelectedApplication));
+                    OnPropertyChanged(nameof(AppLifeTotal));
+                    OnPropertyChanged(nameof(AppLifePeak));
+                    OnPropertyChanged(nameof(AppLifeBlocked));
+                }
+                
+                // Clear loading state after sync
+                IsAppStatsLoading = false;
             });
         }
 
@@ -459,7 +523,23 @@ namespace NetVanguard.App.ViewModels
                 target.BytesSent = source.BytesSent;
                 target.DomainName = source.DomainName;
                 target.EngagingProcesses = source.EngagingProcesses;
-                if (SelectedDomain?.RemoteIp == target.RemoteIp) OnPropertyChanged(nameof(SelectedDomain));
+                
+                // Copy Lifetime Stats
+                target.LifetimeTotalBytesSent = source.LifetimeTotalBytesSent;
+                target.LifetimeTotalBytesReceived = source.LifetimeTotalBytesReceived;
+                target.LifetimeMaxBytesSent = source.LifetimeMaxBytesSent;
+                target.LifetimeMaxBytesReceived = source.LifetimeMaxBytesReceived;
+                target.LifetimeTotalBytesBlocked = source.LifetimeTotalBytesBlocked;
+
+                if (SelectedDomain?.RemoteIp == target.RemoteIp)
+                {
+                    OnPropertyChanged(nameof(SelectedDomain));
+                    OnPropertyChanged(nameof(DomainLifeTotal));
+                    OnPropertyChanged(nameof(DomainLifePeak));
+                    OnPropertyChanged(nameof(DomainLifeBlocked));
+                }
+
+                IsDomainStatsLoading = false;
             });
         }
 

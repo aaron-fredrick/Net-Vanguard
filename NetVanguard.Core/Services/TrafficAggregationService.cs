@@ -15,6 +15,7 @@ namespace NetVanguard.Core.Services
         private readonly ConcurrentDictionary<string, DomainTraffic> _trackedDomains = new();
         private readonly Dictionary<IPAddress, string> _ipToAdapterMap = new();
         private readonly ConcurrentDictionary<string, TrafficLimitConfiguration> _activeLimits = new();
+        private readonly IStatisticsService _statsService;
         
         private string GetLimitKey(LimitTargetType type, string targetName) => $"{type}:{targetName.ToLowerInvariant()}";
         
@@ -22,10 +23,11 @@ namespace NetVanguard.Core.Services
 
         public event EventHandler<TrafficUpdateMessage> OnTrafficUpdated = delegate { };
 
-        public TrafficAggregationService(IEtwMonitorService etwMonitor, IProcessMapperService processMapper)
+        public TrafficAggregationService(IEtwMonitorService etwMonitor, IProcessMapperService processMapper, IStatisticsService statsService)
         {
             _etwMonitor = etwMonitor;
             _processMapper = processMapper;
+            _statsService = statsService;
             _etwMonitor.OnTrafficCaptured += onTrafficCaptured;
             refreshAdapterMap();
         }
@@ -128,6 +130,9 @@ namespace NetVanguard.Core.Services
         {
             bool has_updates = false;
 
+            var appDeltas = new Dictionary<string, (long Sent, long Recv)>();
+            var domainDeltas = new Dictionary<string, (long Sent, long Recv)>();
+
             while (_trafficBuffer.TryDequeue(out var traffic_event))
             {
                 has_updates = true;
@@ -146,10 +151,14 @@ namespace NetVanguard.Core.Services
                         return newApp;
                     });
 
-                if (traffic_event.IsReceive)
-                    app.BytesReceived += traffic_event.Size;
-                else
-                    app.BytesSent += traffic_event.Size;
+                long size = traffic_event.Size;
+                if (traffic_event.IsReceive) app.BytesReceived += size;
+                else app.BytesSent += size;
+
+                // Track 1s delta for BPS/Peak detection
+                if (!appDeltas.ContainsKey(app.ProcessName)) appDeltas[app.ProcessName] = (0, 0);
+                var ad = appDeltas[app.ProcessName];
+                appDeltas[app.ProcessName] = traffic_event.IsReceive ? (ad.Sent, ad.Recv + size) : (ad.Sent + size, ad.Recv);
 
                 // 2. Adapter Aggregation
                 string? adapterName = null;
@@ -161,8 +170,8 @@ namespace NetVanguard.Core.Services
                 if (adapterName != null)
                 {
                     var adapter = _trackedAdapters.GetOrAdd(adapterName, name => new AdapterTraffic { Name = name });
-                    if (traffic_event.IsReceive) adapter.BytesReceived += traffic_event.Size;
-                    else adapter.BytesSent += traffic_event.Size;
+                    if (traffic_event.IsReceive) adapter.BytesReceived += size;
+                    else adapter.BytesSent += size;
                 }
 
                 // 3. Domain/Remote IP Aggregation
@@ -186,8 +195,12 @@ namespace NetVanguard.Core.Services
                         return d;
                     });
                     
-                    if (traffic_event.IsReceive) domain.BytesReceived += traffic_event.Size;
-                    else domain.BytesSent += traffic_event.Size;
+                    if (traffic_event.IsReceive) domain.BytesReceived += size;
+                    else domain.BytesSent += size;
+
+                    if (!domainDeltas.ContainsKey(domain.RemoteIp)) domainDeltas[domain.RemoteIp] = (0, 0);
+                    var dd = domainDeltas[domain.RemoteIp];
+                    domainDeltas[domain.RemoteIp] = traffic_event.IsReceive ? (dd.Sent, dd.Recv + size) : (dd.Sent + size, dd.Recv);
 
                     // Cross-Relational Linkage
                     string linkId = domain.DomainName != "Resolving..." ? domain.DomainName : domain.RemoteIp;
@@ -198,6 +211,34 @@ namespace NetVanguard.Core.Services
 
             if (has_updates)
             {
+                // Push deltas to persistence for totals and peak tracking
+                foreach (var kvp in appDeltas)
+                    _statsService.UpdateProcessStats(kvp.Key, kvp.Value.Sent, kvp.Value.Recv, kvp.Value.Sent, kvp.Value.Recv, 0); // TODO: Add blocked telemetry
+                
+                foreach (var kvp in domainDeltas)
+                    _statsService.UpdateDomainStats(kvp.Key, kvp.Value.Sent, kvp.Value.Recv, kvp.Value.Sent, kvp.Value.Recv, 0);
+
+                // Assign Lifetime Stats before publishing
+                foreach (var app in _trackedApplications.Values)
+                {
+                    var (ts, tr, ms, mr, tb) = _statsService.GetProcessLifetimeStats(app.ProcessName);
+                    app.LifetimeTotalBytesSent = ts;
+                    app.LifetimeTotalBytesReceived = tr;
+                    app.LifetimeMaxBytesSent = ms;
+                    app.LifetimeMaxBytesReceived = mr;
+                    app.LifetimeTotalBytesBlocked = tb;
+                }
+
+                foreach (var domain in _trackedDomains.Values)
+                {
+                    var (ts, tr, ms, mr, tb) = _statsService.GetDomainLifetimeStats(domain.RemoteIp);
+                    domain.LifetimeTotalBytesSent = ts;
+                    domain.LifetimeTotalBytesReceived = tr;
+                    domain.LifetimeMaxBytesSent = ms;
+                    domain.LifetimeMaxBytesReceived = mr;
+                    domain.LifetimeTotalBytesBlocked = tb;
+                }
+
                 var message = new TrafficUpdateMessage
                 {
                     Applications = _trackedApplications.Values.ToList(),
@@ -205,6 +246,9 @@ namespace NetVanguard.Core.Services
                     Domains = _trackedDomains.Values.ToList()
                 };
                 OnTrafficUpdated.Invoke(this, message);
+                
+                // Periodic DB Save
+                _statsService.Save();
             }
         }
 

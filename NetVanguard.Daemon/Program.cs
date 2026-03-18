@@ -12,6 +12,7 @@ builder.Services.AddSingleton<IPipeServerService, PipeServerService>();
 builder.Services.AddSingleton<IFirewallManagerService, WindowsFirewallService>();
 builder.Services.AddSingleton<ICommandServerService, CommandServerService>();
 builder.Services.AddSingleton<IQosThrottlingService, QosThrottlingService>();
+builder.Services.AddSingleton<IStatisticsService, SqliteStatisticsService>();
 
 builder.Services.AddHostedService<QuotaTrackingEngine>();
 builder.Services.AddHostedService<Worker>();
