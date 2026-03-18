@@ -10,6 +10,9 @@ namespace NetVanguard.App
     /// </summary>
     public partial class App : Application
     {
+        [System.Runtime.InteropServices.DllImport("user32.dll", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+        public static extern int MessageBox(IntPtr hWnd, String text, String caption, uint type);
+
         public new static App Current => (App)Application.Current;
         public Window? MainWindow { get; private set; }
 
@@ -20,6 +23,19 @@ namespace NetVanguard.App
         public App()
         {
             this.InitializeComponent();
+            this.UnhandledException += OnUnhandledException;
+        }
+
+        private void OnUnhandledException(object sender, Microsoft.UI.Xaml.UnhandledExceptionEventArgs e)
+        {
+            string errorDetails = $"Unhandled Exception: {e.Message}\n\nStack Trace:\n{e.Exception?.StackTrace}";
+            Debug.WriteLine(errorDetails);
+            
+            // Show a native Win32 message box as a last resort
+            // MB_ICONERROR = 0x00000010L, MB_OK = 0x00000000L
+            MessageBox(IntPtr.Zero, errorDetails, "Net-Vanguard Critical Error", 0x10);
+            
+            // e.Handled = true; // Let it crash so we don't end up in an invalid state, but we've shown the error
         }
 
         /// <summary>

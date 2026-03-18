@@ -26,12 +26,11 @@ public class Worker : BackgroundService
         
         try
         {
-            _trafficAggregationService.OnApplicationsUpdated += async (s, apps) =>
+            _trafficAggregationService.OnTrafficUpdated += async (s, message) =>
             {
-                var message = new TrafficUpdateMessage { Applications = apps.ToList() };
                 await _pipeServer.BroadcastUpdateAsync(message, stoppingToken);
                 
-                _logger.LogInformation($"Broadcasted update for {apps.Count()} applications.");
+                _logger.LogInformation($"Broadcasted update: {message.Applications.Count} apps, {message.Adapters.Count} adapters, {message.Domains.Count} domains.");
             };
 
             _trafficAggregationService.StartAggregating();

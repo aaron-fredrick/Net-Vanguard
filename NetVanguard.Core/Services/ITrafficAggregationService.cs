@@ -4,7 +4,7 @@ namespace NetVanguard.Core.Services
 {
     public interface ITrafficAggregationService
     {
-        event EventHandler<IEnumerable<NetworkApplication>> OnApplicationsUpdated;
+        event EventHandler<TrafficUpdateMessage> OnTrafficUpdated;
         void StartAggregating();
         void StopAggregating();
     }

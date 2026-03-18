@@ -1,7 +1,7 @@
 {
   "format": 1,
   "restore": {
-    "d:\\projects\\Net-Vanguard\\NetVanguard.Daemon\\NetVanguard.Daemon.csproj": {}
+    "D:\\projects\\Net-Vanguard\\NetVanguard.Daemon\\NetVanguard.Daemon.csproj": {}
   },
   "projects": {
     "D:\\projects\\Net-Vanguard\\NetVanguard.Core\\NetVanguard.Core.csproj": {
@@ -50,6 +50,10 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "CommunityToolkit.Mvvm": {
+              "target": "Package",
+              "version": "[8.4.0, )"
+            },
             "Microsoft.Diagnostics.Tracing.TraceEvent": {
               "target": "Package",
               "version": "[3.1.30, )"
@@ -75,14 +79,14 @@
         }
       }
     },
-    "d:\\projects\\Net-Vanguard\\NetVanguard.Daemon\\NetVanguard.Daemon.csproj": {
+    "D:\\projects\\Net-Vanguard\\NetVanguard.Daemon\\NetVanguard.Daemon.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "d:\\projects\\Net-Vanguard\\NetVanguard.Daemon\\NetVanguard.Daemon.csproj",
+        "projectUniqueName": "D:\\projects\\Net-Vanguard\\NetVanguard.Daemon\\NetVanguard.Daemon.csproj",
         "projectName": "NetVanguard.Daemon",
-        "projectPath": "d:\\projects\\Net-Vanguard\\NetVanguard.Daemon\\NetVanguard.Daemon.csproj",
+        "projectPath": "D:\\projects\\Net-Vanguard\\NetVanguard.Daemon\\NetVanguard.Daemon.csproj",
         "packagesPath": "C:\\Users\\Dell\\.nuget\\packages\\",
-        "outputPath": "d:\\projects\\Net-Vanguard\\NetVanguard.Daemon\\obj\\",
+        "outputPath": "D:\\projects\\Net-Vanguard\\NetVanguard.Daemon\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\Microsoft Visual Studio\\Shared\\NuGetPackages"

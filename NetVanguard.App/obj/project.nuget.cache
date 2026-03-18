@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "9kDYeIsyXis=",
+  "dgSpecHash": "HKVuq7dGLGs=",
   "success": true,
-  "projectFilePath": "D:\\projects\\Net-Vanguard\\NetVanguard.App\\NetVanguard.App.csproj",
+  "projectFilePath": "d:\\projects\\Net-Vanguard\\NetVanguard.App\\NetVanguard.App.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Dell\\.nuget\\packages\\communitytoolkit.mvvm\\8.4.0\\communitytoolkit.mvvm.8.4.0.nupkg.sha512",
     "C:\\Users\\Dell\\.nuget\\packages\\harfbuzzsharp\\8.3.1.1\\harfbuzzsharp.8.3.1.1.nupkg.sha512",

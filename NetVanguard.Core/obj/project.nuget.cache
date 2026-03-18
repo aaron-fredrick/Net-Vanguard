@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "wt5RQHetJAc=",
+  "dgSpecHash": "hC6H/iV5d2I=",
   "success": true,
-  "projectFilePath": "D:\\projects\\Net-Vanguard\\NetVanguard.Core\\NetVanguard.Core.csproj",
+  "projectFilePath": "d:\\projects\\Net-Vanguard\\NetVanguard.Core\\NetVanguard.Core.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\Dell\\.nuget\\packages\\communitytoolkit.mvvm\\8.4.0\\communitytoolkit.mvvm.8.4.0.nupkg.sha512",
     "C:\\Users\\Dell\\.nuget\\packages\\microsoft.diagnostics.netcore.client\\0.2.510501\\microsoft.diagnostics.netcore.client.0.2.510501.nupkg.sha512",
     "C:\\Users\\Dell\\.nuget\\packages\\microsoft.diagnostics.tracing.traceevent\\3.1.30\\microsoft.diagnostics.tracing.traceevent.3.1.30.nupkg.sha512",
     "C:\\Users\\Dell\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\6.0.0\\microsoft.extensions.dependencyinjection.6.0.0.nupkg.sha512",
