@@ -4,9 +4,7 @@
 
 [![.NET Test](https://github.com/aaron-fredrick/Net-Vanguard/actions/workflows/dotnet-test.yml/badge.svg)](https://github.com/aaron-fredrick/Net-Vanguard/actions/workflows/dotnet-test.yml)
 [![CodeQL](https://github.com/aaron-fredrick/Net-Vanguard/actions/workflows/codeql.yml/badge.svg)](https://github.com/aaron-fredrick/Net-Vanguard/actions/workflows/codeql.yml)
-![.NET 8](https://img.shields.io/badge/.NET-8.0-512BD4?logo=dotnet&style=flat-square)
-![WinUI 3](https://img.shields.io/badge/WinUI-3-0078D7?logo=windows&style=flat-square)
-![License](https://img.shields.io/badge/License-PolyForm%20Noncommercial-blue.svg?style=flat-square)
+![Version](https://img.shields.io/badge/version-v0.1.00--dev-blue?style=flat-square)
 
 </div>
 
