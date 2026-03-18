@@ -5,10 +5,18 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <NavigationView x:Name="NavView" PaneDisplayMode="Left" IsSettingsVisible="False" SelectionChanged="NavView_SelectionChanged" Loaded="NavView_Loaded">
+        <NavigationView x:Name="NavView" PaneDisplayMode="Left" IsSettingsVisible="False" SelectionChanged="NavView_SelectionChanged" Loaded="NavView_Loaded" OpenPaneLength="180">
             <NavigationView.MenuItems>
-                <NavigationViewItem Tag="Dashboard" Content="Dashboard" Icon="Home"/>
-                <NavigationViewItem Tag="Firewall" Content="Firewall Rules" Icon="Shield"/>
+                <NavigationViewItem Tag="Dashboard" Content="Dashboard">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE80F;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Tag="Firewall" Content="Firewall Rules">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE773;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
             </NavigationView.MenuItems>
             <Frame x:Name="ContentFrame" Padding="0"/>
         </NavigationView>
