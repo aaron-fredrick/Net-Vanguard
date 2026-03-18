@@ -23,7 +23,7 @@ namespace NetVanguard.App.Helpers
             return (InputSystemCursorShape)element.GetValue(CursorProperty);
         }
 
-        private static readonly System.Reflection.PropertyInfo _protectedCursorProp = 
+        private static readonly System.Reflection.PropertyInfo? _protectedCursorProp = 
             typeof(UIElement).GetProperty("ProtectedCursor", 
                 System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public);
 

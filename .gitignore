@@ -104,6 +104,7 @@ sql/
 ClientBin/
 [Ss][Ee][Rr][Vv][Ee][Rr].[Gg].cs
 [Gg]enerated/
+**/*.log
 
 # WinUI 3 / Windows App SDK
 AppPackages/
