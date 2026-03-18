@@ -7,5 +7,6 @@ namespace NetVanguard.Core.Services
         event EventHandler<TrafficUpdateMessage> OnTrafficUpdated;
         void StartAggregating();
         void StopAggregating();
+        void SetApplicationLimit(string processName, long? dataQuotaBytes, long? throttleLimitBps);
     }
 }

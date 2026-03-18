@@ -14,6 +14,7 @@ namespace NetVanguard.Core.Services
         private readonly ConcurrentDictionary<string, AdapterTraffic> _trackedAdapters = new();
         private readonly ConcurrentDictionary<string, DomainTraffic> _trackedDomains = new();
         private readonly Dictionary<IPAddress, string> _ipToAdapterMap = new();
+        private readonly ConcurrentDictionary<string, (long? QuotaBytes, long? ThrottleBps)> _appLimits = new();
         
         private CancellationTokenSource? _cancellationTokenSource;
 
@@ -53,6 +54,20 @@ namespace NetVanguard.Core.Services
         {
             _cancellationTokenSource?.Cancel();
             _etwMonitor.StopMonitoring();
+        }
+
+        public void SetApplicationLimit(string processName, long? dataQuotaBytes, long? throttleLimitBps)
+        {
+            _appLimits[processName] = (dataQuotaBytes, throttleLimitBps);
+
+            foreach (var app in _trackedApplications.Values)
+            {
+                if (string.Equals(app.ProcessName, processName, StringComparison.OrdinalIgnoreCase))
+                {
+                    app.DataQuotaBytes = dataQuotaBytes;
+                    app.ThrottleLimitBps = throttleLimitBps;
+                }
+            }
         }
 
         private void onTrafficCaptured(object? sender, NetworkTrafficEventArgs e)
@@ -96,7 +111,16 @@ namespace NetVanguard.Core.Services
                 // 1. Process Aggregation
                 var app = _trackedApplications.GetOrAdd(
                     traffic_event.ProcessId,
-                    pid => _processMapper.GetOrResolveApplication(pid));
+                    pid => 
+                    {
+                        var newApp = _processMapper.GetOrResolveApplication(pid);
+                        if (_appLimits.TryGetValue(newApp.ProcessName, out var limit))
+                        {
+                            newApp.DataQuotaBytes = limit.QuotaBytes;
+                            newApp.ThrottleLimitBps = limit.ThrottleBps;
+                        }
+                        return newApp;
+                    });
 
                 if (traffic_event.IsReceive)
                     app.BytesReceived += traffic_event.Size;

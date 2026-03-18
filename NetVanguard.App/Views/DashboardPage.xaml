@@ -16,7 +16,6 @@
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <converters:BoolToAccentConverter x:Key="BoolToAccentConverter"/>
     </Page.Resources>
-    
     <Grid Padding="24">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -171,6 +170,7 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
                                 <StackPanel Grid.Column="0">
                                     <TextBlock Text="{x:Bind ProcessName, Mode=OneWay}" FontWeight="SemiBold"/>
@@ -179,6 +179,9 @@
                                 <TextBlock Grid.Column="1" Text="{x:Bind DisplayBytesReceived, Mode=OneWay}" VerticalAlignment="Center"/>
                                 <TextBlock Grid.Column="2" Text="{x:Bind DisplayBytesSent, Mode=OneWay}" VerticalAlignment="Center"/>
                                 <TextBlock Grid.Column="3" Text="{x:Bind LastSeen, Mode=OneWay}" FontSize="11" Foreground="Gray" VerticalAlignment="Center" Width="100"/>
+                                <Button Grid.Column="4" Background="Transparent" BorderThickness="0" Padding="8" ToolTipService.ToolTip="Set Limit" Click="SetLimit_Click" VerticalAlignment="Center">
+                                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE713;" FontSize="14" Foreground="Gray"/>
+                                </Button>
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>

@@ -252,6 +252,37 @@ namespace NetVanguard.App.ViewModels
             });
         }
 
+        public async void SendSetLimitCommand(string processName, long? quotaBytes, long? throttleBps)
+        {
+            try
+            {
+                var payload = new 
+                { 
+                    ProcessName = processName, 
+                    DataQuotaBytes = quotaBytes, 
+                    ThrottleLimitBps = throttleBps 
+                };
+
+                var cmd = new CommandMessage
+                {
+                    Command = CommandType.SetLimit,
+                    Payload = System.Text.Json.JsonSerializer.Serialize(payload)
+                };
+
+                var pipeClient = new System.IO.Pipes.NamedPipeClientStream(
+                    ".", NetVanguard.Core.Infrastructure.PipeConstants.CommandPipeName, System.IO.Pipes.PipeDirection.InOut, System.IO.Pipes.PipeOptions.Asynchronous);
+
+                await pipeClient.ConnectAsync(5000);
+
+                using var writer = new System.IO.StreamWriter(pipeClient) { AutoFlush = true };
+                await writer.WriteLineAsync(System.Text.Json.JsonSerializer.Serialize(cmd));
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error sending SetLimit command to Daemon: {ex.Message}");
+            }
+        }
+
         private void refreshCurrentView()
         {
             if (_lastMessage == null) return;

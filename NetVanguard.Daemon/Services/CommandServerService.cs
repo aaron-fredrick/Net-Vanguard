@@ -14,11 +14,13 @@ namespace NetVanguard.Daemon.Services
     public class CommandServerService : ICommandServerService
     {
         private readonly IFirewallManagerService _firewallService;
+        private readonly ITrafficAggregationService _trafficAggregationService;
         private readonly ILogger<CommandServerService> _logger;
 
-        public CommandServerService(IFirewallManagerService firewallService, ILogger<CommandServerService> logger)
+        public CommandServerService(IFirewallManagerService firewallService, ITrafficAggregationService trafficAggregationService, ILogger<CommandServerService> logger)
         {
             _firewallService = firewallService;
+            _trafficAggregationService = trafficAggregationService;
             _logger = logger;
         }
 
@@ -95,6 +97,12 @@ namespace NetVanguard.Daemon.Services
                         if (string.IsNullOrWhiteSpace(request.Payload)) throw new ArgumentException("Payload is empty.");
                         _firewallService.DeleteRule(request.Payload); // payload is directly the string name
                         break;
+                        
+                    case CommandType.SetLimit:
+                        if (string.IsNullOrWhiteSpace(request.Payload)) throw new ArgumentException("Payload is empty.");
+                        var limitCmd = JsonSerializer.Deserialize<SetLimitPayload>(request.Payload);
+                        if (limitCmd != null) _trafficAggregationService.SetApplicationLimit(limitCmd.ProcessName, limitCmd.DataQuotaBytes, limitCmd.ThrottleLimitBps);
+                        break;
 
                     default:
                         response.Success = false;
@@ -116,6 +124,13 @@ namespace NetVanguard.Daemon.Services
         {
             public string Name { get; set; } = string.Empty;
             public bool Enabled { get; set; }
+        }
+
+        public class SetLimitPayload
+        {
+            public string ProcessName { get; set; } = string.Empty;
+            public long? DataQuotaBytes { get; set; }
+            public long? ThrottleLimitBps { get; set; }
         }
     }
 }
