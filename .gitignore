@@ -126,8 +126,13 @@ project.assets.json
 *.bak
 *.tmp
 
+# Local Database files
+*.db
+*.db-journal
+
+# Build logs
+errors.log
+*.err
+
 # MacOS
 .DS_Store
-NetVanguard.App/obj/project.nuget.cache
-NetVanguard.Core/obj/project.nuget.cache
-NetVanguard.Daemon/obj/project.nuget.cache

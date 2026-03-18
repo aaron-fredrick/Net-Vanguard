@@ -13,9 +13,10 @@
 ## ✨ Key Features
 * **Real-time ETW Network Monitoring:** Analyzes network traffic natively at the kernel level without injecting drivers or resorting to external packet sniffers.
 * **Granular Process Tracking:** Sort network traffic (Upload, Download, Total Activity) per application natively in the UI.
+* **SQLite Persistent Analytics:** Automatically tracks and safely perists lifetime download, upload, and blocked traffic limits cross-session natively without memory leaks.
 * **Adapter & Domain Analytics:** View precisely which domains are communicating and how much data passes through individual Wi-Fi or Ethernet interfaces.
 * **Native Windows Firewall Integration:** A fully integrated Firewall Rules dashboard lets you view, toggle, delete, and implicitly generate Block/Allow rules seamlessly using secure COM Interop APIs (`HNetCfg.FwPolicy2`).
-* **WinUI 3 Fluent Dashboard:** A premium, fully-responsive dashboard engineered specifically for Windows 11 design idioms, featuring dark/light mode, `NavigationView` collapses, and high-performance `LiveCharts2` metrics.
+* **WinUI 3 Fluent Dashboard:** A premium, fully-responsive dashboard engineered specifically for Windows 11 design idioms, featuring dark/light mode, custom integrated title bars, intelligent loading indicators, `NavigationView` collapses, and high-performance `LiveCharts2` metrics.
 
 ## 🏗️ Architecture Design
 Because deep system APIs (ETW tracking, Firewall rules) require strict Administrator privileges on Windows, Net-Vanguard securely segregates capabilities into two isolated processes communicating over a highly optimized Named Pipe (`NetVanguard_TrafficPipe` & `NetVanguard_CommandPipe`):

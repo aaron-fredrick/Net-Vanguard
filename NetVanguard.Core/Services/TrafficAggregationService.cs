@@ -28,11 +28,11 @@ namespace NetVanguard.Core.Services
             _etwMonitor = etwMonitor;
             _processMapper = processMapper;
             _statsService = statsService;
-            _etwMonitor.OnTrafficCaptured += onTrafficCaptured;
-            refreshAdapterMap();
+            _etwMonitor.OnTrafficCaptured += OnTrafficCaptured;
+            RefreshAdapterMap();
         }
 
-        private void refreshAdapterMap()
+        private void RefreshAdapterMap()
         {
             _ipToAdapterMap.Clear();
             foreach (var ni in NetworkInterface.GetAllNetworkInterfaces())
@@ -51,7 +51,7 @@ namespace NetVanguard.Core.Services
         {
             _cancellationTokenSource = new CancellationTokenSource();
             _etwMonitor.StartMonitoring();
-            Task.Run(() => runAggregationLoop(_cancellationTokenSource.Token));
+            Task.Run(() => RunAggregationLoop(_cancellationTokenSource.Token));
         }
 
         public void StopAggregating()
@@ -96,12 +96,12 @@ namespace NetVanguard.Core.Services
             }
         }
 
-        private void onTrafficCaptured(object? sender, NetworkTrafficEventArgs e)
+        private void OnTrafficCaptured(object? sender, NetworkTrafficEventArgs e)
         {
             _trafficBuffer.Enqueue(e);
         }
 
-        private async Task runAggregationLoop(CancellationToken token)
+        private async Task RunAggregationLoop(CancellationToken token)
         {
             int refreshCounter = 0;
             while (!token.IsCancellationRequested)
@@ -113,11 +113,11 @@ namespace NetVanguard.Core.Services
                     // Periodically refresh adapter map in case of network changes
                     if (++refreshCounter >= 30)
                     {
-                        refreshAdapterMap();
+                        RefreshAdapterMap();
                         refreshCounter = 0;
                     }
 
-                    drainBufferAndPublish();
+                    DrainBufferAndPublish();
                 }
                 catch (TaskCanceledException)
                 {
@@ -126,20 +126,20 @@ namespace NetVanguard.Core.Services
             }
         }
 
-        private void drainBufferAndPublish()
+        private void DrainBufferAndPublish()
         {
-            bool has_updates = false;
+            bool hasUpdates = false;
 
             var appDeltas = new Dictionary<string, (long Sent, long Recv)>();
             var domainDeltas = new Dictionary<string, (long Sent, long Recv)>();
 
-            while (_trafficBuffer.TryDequeue(out var traffic_event))
+            while (_trafficBuffer.TryDequeue(out var trafficEvent))
             {
-                has_updates = true;
+                hasUpdates = true;
 
                 // 1. Process Aggregation
                 var app = _trackedApplications.GetOrAdd(
-                    traffic_event.ProcessId,
+                    trafficEvent.ProcessId,
                     pid => 
                     {
                         var newApp = _processMapper.GetOrResolveApplication(pid);
@@ -151,18 +151,18 @@ namespace NetVanguard.Core.Services
                         return newApp;
                     });
 
-                long size = traffic_event.Size;
-                if (traffic_event.IsReceive) app.BytesReceived += size;
+                long size = trafficEvent.Size;
+                if (trafficEvent.IsReceive) app.BytesReceived += size;
                 else app.BytesSent += size;
 
                 // Track 1s delta for BPS/Peak detection
                 if (!appDeltas.ContainsKey(app.ProcessName)) appDeltas[app.ProcessName] = (0, 0);
                 var ad = appDeltas[app.ProcessName];
-                appDeltas[app.ProcessName] = traffic_event.IsReceive ? (ad.Sent, ad.Recv + size) : (ad.Sent + size, ad.Recv);
+                appDeltas[app.ProcessName] = trafficEvent.IsReceive ? (ad.Sent, ad.Recv + size) : (ad.Sent + size, ad.Recv);
 
                 // 2. Adapter Aggregation
                 string? adapterName = null;
-                if (IPAddress.TryParse(traffic_event.IsReceive ? traffic_event.DestinationIp : traffic_event.SourceIp, out var localIp))
+                if (IPAddress.TryParse(trafficEvent.IsReceive ? trafficEvent.DestinationIp : trafficEvent.SourceIp, out var localIp))
                 {
                     _ipToAdapterMap.TryGetValue(localIp, out adapterName);
                 }
@@ -170,12 +170,12 @@ namespace NetVanguard.Core.Services
                 if (adapterName != null)
                 {
                     var adapter = _trackedAdapters.GetOrAdd(adapterName, name => new AdapterTraffic { Name = name });
-                    if (traffic_event.IsReceive) adapter.BytesReceived += size;
+                    if (trafficEvent.IsReceive) adapter.BytesReceived += size;
                     else adapter.BytesSent += size;
                 }
 
                 // 3. Domain/Remote IP Aggregation
-                string remoteIp = traffic_event.IsReceive ? traffic_event.SourceIp : traffic_event.DestinationIp;
+                string remoteIp = trafficEvent.IsReceive ? trafficEvent.SourceIp : trafficEvent.DestinationIp;
                 if (!string.IsNullOrEmpty(remoteIp))
                 {
                     var domain = _trackedDomains.GetOrAdd(remoteIp, ip => {
@@ -195,12 +195,12 @@ namespace NetVanguard.Core.Services
                         return d;
                     });
                     
-                    if (traffic_event.IsReceive) domain.BytesReceived += size;
+                    if (trafficEvent.IsReceive) domain.BytesReceived += size;
                     else domain.BytesSent += size;
 
                     if (!domainDeltas.ContainsKey(domain.RemoteIp)) domainDeltas[domain.RemoteIp] = (0, 0);
                     var dd = domainDeltas[domain.RemoteIp];
-                    domainDeltas[domain.RemoteIp] = traffic_event.IsReceive ? (dd.Sent, dd.Recv + size) : (dd.Sent + size, dd.Recv);
+                    domainDeltas[domain.RemoteIp] = trafficEvent.IsReceive ? (dd.Sent, dd.Recv + size) : (dd.Sent + size, dd.Recv);
 
                     // Cross-Relational Linkage
                     string linkId = domain.DomainName != "Resolving..." ? domain.DomainName : domain.RemoteIp;
@@ -209,7 +209,7 @@ namespace NetVanguard.Core.Services
                 }
             }
 
-            if (has_updates)
+            if (hasUpdates)
             {
                 // Push deltas to persistence for totals and peak tracking
                 foreach (var kvp in appDeltas)
@@ -254,7 +254,7 @@ namespace NetVanguard.Core.Services
 
         public void Dispose()
         {
-            _etwMonitor.OnTrafficCaptured -= onTrafficCaptured;
+            _etwMonitor.OnTrafficCaptured -= OnTrafficCaptured;
             StopAggregating();
             _cancellationTokenSource?.Dispose();
             GC.SuppressFinalize(this);

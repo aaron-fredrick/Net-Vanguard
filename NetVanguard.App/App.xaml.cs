@@ -84,6 +84,9 @@ namespace NetVanguard.App
             appWindow.Resize(new Windows.Graphics.SizeInt32 { Width = 1100, Height = 800 });
             
             MainWindow!.Activate();
+            
+            // Modern Title Bar integration
+            MainWindow.ExtendsContentIntoTitleBar = true;
         }
 
         /// <summary>

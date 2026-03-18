@@ -9,6 +9,12 @@ namespace NetVanguard.App.Views
         public MainPage()
         {
             this.InitializeComponent();
+            
+            // Set custom title bar
+            if (App.Current.MainWindow != null)
+            {
+                App.Current.MainWindow.SetTitleBar(AppTitleBar);
+            }
         }
 
         private void NavView_Loaded(object sender, RoutedEventArgs e)

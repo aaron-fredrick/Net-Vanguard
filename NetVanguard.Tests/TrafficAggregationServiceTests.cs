@@ -12,11 +12,12 @@ namespace NetVanguard.Tests
             // Arrange
             var mockEtwMonitor = new Mock<IEtwMonitorService>();
             var mockProcessMapper = new Mock<IProcessMapperService>();
+            var mockStatsService = new Mock<IStatisticsService>();
 
             mockProcessMapper.Setup(m => m.GetOrResolveApplication(1234))
                 .Returns(new NetworkApplication { ProcessId = 1234, ProcessName = "chrome" });
 
-            var service = new TrafficAggregationService(mockEtwMonitor.Object, mockProcessMapper.Object);
+            var service = new TrafficAggregationService(mockEtwMonitor.Object, mockProcessMapper.Object, mockStatsService.Object);
 
             TrafficUpdateMessage capturedMessage = null;
             service.OnTrafficUpdated += (s, msg) => capturedMessage = msg;
@@ -45,7 +46,7 @@ namespace NetVanguard.Tests
             });
 
             // Need to force drain buffer since it's a background loop
-            var drainMethod = typeof(TrafficAggregationService).GetMethod("drainBufferAndPublish", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            var drainMethod = typeof(TrafficAggregationService).GetMethod("DrainBufferAndPublish", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
             drainMethod.Invoke(service, null);
 
             // Assert
