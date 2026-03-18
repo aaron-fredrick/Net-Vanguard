@@ -9,6 +9,8 @@ builder.Services.AddSingleton<IEtwMonitorService, EtwMonitorService>();
 builder.Services.AddSingleton<IProcessMapperService, ProcessMapperService>();
 builder.Services.AddSingleton<ITrafficAggregationService, TrafficAggregationService>();
 builder.Services.AddSingleton<IPipeServerService, PipeServerService>();
+builder.Services.AddSingleton<IFirewallManagerService, WindowsFirewallService>();
+builder.Services.AddSingleton<ICommandServerService, CommandServerService>();
 
 builder.Services.AddHostedService<Worker>();
 

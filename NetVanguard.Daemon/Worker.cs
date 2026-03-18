@@ -9,15 +9,18 @@ public class Worker : BackgroundService
     private readonly ILogger<Worker> _logger;
     private readonly ITrafficAggregationService _trafficAggregationService;
     private readonly IPipeServerService _pipeServer;
+    private readonly ICommandServerService _commandServer;
 
     public Worker(
         ILogger<Worker> logger, 
         ITrafficAggregationService trafficAggregationService,
-        IPipeServerService pipeServer)
+        IPipeServerService pipeServer,
+        ICommandServerService commandServer)
     {
         _logger = logger;
         _trafficAggregationService = trafficAggregationService;
         _pipeServer = pipeServer;
+        _commandServer = commandServer;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -34,6 +37,9 @@ public class Worker : BackgroundService
             };
 
             _trafficAggregationService.StartAggregating();
+
+            // Start the command listening pipe loop in the background
+            _ = Task.Run(() => _commandServer.StartListeningAsync(stoppingToken), stoppingToken);
 
             await Task.Delay(-1, stoppingToken);
         }
