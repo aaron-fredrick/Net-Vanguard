@@ -15,6 +15,8 @@ namespace NetVanguard.App
 
         public new static App Current => (App)Application.Current;
         public Window? MainWindow { get; private set; }
+        
+        public static NetVanguard.App.Services.SettingsService AppSettings { get; } = new NetVanguard.App.Services.SettingsService();
 
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
@@ -61,6 +63,16 @@ namespace NetVanguard.App
                 rootFrame.NavigationFailed += OnNavigationFailed;
                 MainWindow.Content = rootFrame;
             }
+
+            // Apply persistent user theme
+            rootFrame.RequestedTheme = AppSettings.Theme;
+            AppSettings.ThemeChanged += (s, theme) =>
+            {
+                if (MainWindow?.Content is FrameworkElement fe)
+                {
+                    fe.RequestedTheme = theme;
+                }
+            };
 
             _ = rootFrame.Navigate(typeof(MainPage), e.Arguments);
             MainWindow.Title = "Net-Vanguard Dashboard";

@@ -98,6 +98,20 @@ namespace NetVanguard.Core.Models
             set => SetProperty(ref _lastSeen, value);
         }
 
+        private long? _dataQuotaBytes;
+        public long? DataQuotaBytes
+        {
+            get => _dataQuotaBytes;
+            set => SetProperty(ref _dataQuotaBytes, value);
+        }
+
+        private long? _throttleLimitBps;
+        public long? ThrottleLimitBps
+        {
+            get => _throttleLimitBps;
+            set => SetProperty(ref _throttleLimitBps, value);
+        }
+
         private bool _isBlocked;
         public bool IsBlocked
         {

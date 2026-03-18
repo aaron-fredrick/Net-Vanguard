@@ -6,7 +6,7 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <NavigationView x:Name="NavView" PaneDisplayMode="Left" IsPaneOpen="False" IsSettingsVisible="False" SelectionChanged="NavView_SelectionChanged" Loaded="NavView_Loaded" OpenPaneLength="180">
+        <NavigationView x:Name="NavView" PaneDisplayMode="Left" IsPaneOpen="False" IsSettingsVisible="True" SelectionChanged="NavView_SelectionChanged" Loaded="NavView_Loaded" OpenPaneLength="180">
             <NavigationView.MenuItems>
                 <NavigationViewItem Tag="Dashboard" Content="Dashboard">
                     <NavigationViewItem.Icon>

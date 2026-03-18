@@ -22,9 +22,16 @@ namespace NetVanguard.App.Views
 
         private void NavView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
-            if (args.SelectedItem is NavigationViewItem navItem)
+            if (args.IsSettingsSelected)
             {
-                switch (navItem.Tag.ToString())
+                if (ContentFrame.CurrentSourcePageType != typeof(SettingsPage))
+                {
+                    ContentFrame.Navigate(typeof(SettingsPage));
+                }
+            }
+            else if (args.SelectedItem is NavigationViewItem navItem)
+            {
+                switch (navItem.Tag?.ToString())
                 {
                     case "Dashboard":
                         if (ContentFrame.CurrentSourcePageType != typeof(DashboardPage))
