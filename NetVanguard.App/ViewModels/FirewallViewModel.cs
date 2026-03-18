@@ -76,6 +76,19 @@ namespace NetVanguard.App.ViewModels
         }
 
         [RelayCommand]
+        public async Task AddRuleAsync(FirewallRuleModel rule)
+        {
+            if (rule == null) return;
+            
+            bool success = await _commandClient.AddRuleAsync(rule);
+            if (success)
+            {
+                // Reload or append
+                Rules.Add(rule);
+            }
+        }
+
+        [RelayCommand]
         public async Task DeleteRuleAsync(FirewallRuleModel rule)
         {
             if (rule == null) return;
