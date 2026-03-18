@@ -14,7 +14,7 @@
 
         <!-- Project Options -->
         <Nullable>enable</Nullable>
-        <LangVersion>latest</LangVersion>
+        <LangVersion>preview</LangVersion>
         <ImplicitUsings>enable</ImplicitUsings>
         <RootNamespace>NetVanguard.App</RootNamespace>
 

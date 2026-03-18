@@ -19,7 +19,7 @@ namespace NetVanguard.App.ViewModels
         [NotifyPropertyChangedFor(nameof(DetailTotalBytesBlocked))]
         [NotifyPropertyChangedFor(nameof(DetailDataQuota))]
         [NotifyPropertyChangedFor(nameof(DetailThrottle))]
-        private TrafficLimitConfiguration? _selectedLimit;
+        public partial TrafficLimitConfiguration? SelectedLimit { get; set; }
 
         public bool IsDetailPaneVisible => SelectedLimit != null;
         public bool IsDetailPaneHidden => SelectedLimit == null;

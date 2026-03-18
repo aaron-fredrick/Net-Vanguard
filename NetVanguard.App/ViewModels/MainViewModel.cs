@@ -90,90 +90,60 @@ namespace NetVanguard.App.ViewModels
             }
         }
 
-        private ObservableCollection<NetworkApplication> _activeApplications = new();
-        public ObservableCollection<NetworkApplication> ActiveApplications
-        {
-            get => _activeApplications;
-            set => SetProperty(ref _activeApplications, value);
-        }
+        [ObservableProperty]
+        public partial ObservableCollection<NetworkApplication> ActiveApplications { get; set; } = new();
 
-        private ObservableCollection<AdapterTraffic> _adapterTraffic = new();
-        public ObservableCollection<AdapterTraffic> AdapterTraffic
-        {
-            get => _adapterTraffic;
-            set => SetProperty(ref _adapterTraffic, value);
-        }
+        [ObservableProperty]
+        public partial ObservableCollection<AdapterTraffic> AdapterTraffic { get; set; } = new();
 
-        private ObservableCollection<DomainTraffic> _domainTraffic = new();
-        public ObservableCollection<DomainTraffic> DomainTraffic
-        {
-            get => _domainTraffic;
-            set => SetProperty(ref _domainTraffic, value);
-        }
+        [ObservableProperty]
+        public partial ObservableCollection<DomainTraffic> DomainTraffic { get; set; } = new();
 
-        private bool _isAppStatsLoading;
-        public bool IsAppStatsLoading
-        {
-            get => _isAppStatsLoading;
-            set => SetProperty(ref _isAppStatsLoading, value);
-        }
+        [ObservableProperty]
+        public partial bool IsAppStatsLoading { get; set; }
 
-        private bool _isDomainStatsLoading;
-        public bool IsDomainStatsLoading
-        {
-            get => _isDomainStatsLoading;
-            set => SetProperty(ref _isDomainStatsLoading, value);
-        }
+        [ObservableProperty]
+        public partial bool IsDomainStatsLoading { get; set; }
 
-        private NetworkApplication? _selectedApplication;
-        public NetworkApplication? SelectedApplication
+        [ObservableProperty]
+        public partial NetworkApplication? SelectedApplication { get; set; }
+
+        [ObservableProperty]
+        public partial DomainTraffic? SelectedDomain { get; set; }
+
+        partial void OnSelectedApplicationChanged(NetworkApplication? value)
         {
-            get => _selectedApplication;
-            set
+            OnPropertyChanged(nameof(IsAppDetailVisible));
+            OnPropertyChanged(nameof(IsDetailPaneVisible));
+            OnPropertyChanged(nameof(AppDetailName));
+            OnPropertyChanged(nameof(AppDetailPath));
+            OnPropertyChanged(nameof(AppDetailDomains));
+
+            if (value != null)
             {
-                if (SetProperty(ref _selectedApplication, value))
-                {
-                    OnPropertyChanged(nameof(IsAppDetailVisible));
-                    OnPropertyChanged(nameof(IsDetailPaneVisible));
-                    OnPropertyChanged(nameof(AppDetailName));
-                    OnPropertyChanged(nameof(AppDetailPath));
-                    OnPropertyChanged(nameof(AppDetailDomains));
-                    
-                    if (value != null)
-                    {
-                        SelectedDomain = null; // Mutually exclusive
-                        // Trigger loading state if stats are currently empty/zero
-                        if (value.LifetimeTotalBytesSent == 0 && value.LifetimeTotalBytesReceived == 0)
-                            IsAppStatsLoading = true;
-                    }
-                    else IsAppStatsLoading = false;
-                }
+                SelectedDomain = null; // Mutually exclusive
+                // Trigger loading state if stats are currently empty/zero
+                if (value.LifetimeTotalBytesSent == 0 && value.LifetimeTotalBytesReceived == 0)
+                    IsAppStatsLoading = true;
             }
+            else IsAppStatsLoading = false;
         }
 
-        private DomainTraffic? _selectedDomain;
-        public DomainTraffic? SelectedDomain
+        partial void OnSelectedDomainChanged(DomainTraffic? value)
         {
-            get => _selectedDomain;
-            set
+            OnPropertyChanged(nameof(IsDomainDetailVisible));
+            OnPropertyChanged(nameof(IsDetailPaneVisible));
+            OnPropertyChanged(nameof(DomainDetailName));
+            OnPropertyChanged(nameof(DomainDetailIp));
+            OnPropertyChanged(nameof(DomainDetailApps));
+
+            if (value != null)
             {
-                if (SetProperty(ref _selectedDomain, value))
-                {
-                    OnPropertyChanged(nameof(IsDomainDetailVisible));
-                    OnPropertyChanged(nameof(IsDetailPaneVisible));
-                    OnPropertyChanged(nameof(DomainDetailName));
-                    OnPropertyChanged(nameof(DomainDetailIp));
-                    OnPropertyChanged(nameof(DomainDetailApps));
-                    
-                    if (value != null)
-                    {
-                        SelectedApplication = null; // Mutually exclusive
-                        if (value.LifetimeTotalBytesSent == 0 && value.LifetimeTotalBytesReceived == 0)
-                            IsDomainStatsLoading = true;
-                    }
-                    else IsDomainStatsLoading = false;
-                }
+                SelectedApplication = null; // Mutually exclusive
+                if (value.LifetimeTotalBytesSent == 0 && value.LifetimeTotalBytesReceived == 0)
+                    IsDomainStatsLoading = true;
             }
+            else IsDomainStatsLoading = false;
         }
 
         public bool IsAppDetailVisible => SelectedApplication != null;
