@@ -1,4 +1,14 @@
+<div align="center">
+
 # 🛡️ Net-Vanguard
+
+[![.NET Test](https://github.com/aaron-fredrick/Net-Vanguard/actions/workflows/dotnet-test.yml/badge.svg)](https://github.com/aaron-fredrick/Net-Vanguard/actions/workflows/dotnet-test.yml)
+[![CodeQL](https://github.com/aaron-fredrick/Net-Vanguard/actions/workflows/codeql.yml/badge.svg)](https://github.com/aaron-fredrick/Net-Vanguard/actions/workflows/codeql.yml)
+![.NET 8](https://img.shields.io/badge/.NET-8.0-512BD4?logo=dotnet&style=flat-square)
+![WinUI 3](https://img.shields.io/badge/WinUI-3-0078D7?logo=windows&style=flat-square)
+![License](https://img.shields.io/badge/License-PolyForm%20Noncommercial-blue.svg?style=flat-square)
+
+</div>
 
 **Net-Vanguard** is an advanced, high-performance network tracking and Windows Firewall management utility built using modern C# 12 and .NET 8. It leverages the raw speed of Event Tracing for Windows (ETW) and a decoupled, privilege-separated pipeline to deliver a robust, real-time networking dashboard.
 
