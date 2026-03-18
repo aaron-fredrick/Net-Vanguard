@@ -8,6 +8,7 @@ using LiveChartsCore;
 using LiveChartsCore.Defaults;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
+using LiveChartsCore.SkiaSharpView.Painting.Effects;
 using NetVanguard.App.Services;
 using NetVanguard.Core.Models;
 using SkiaSharp;
@@ -255,8 +256,39 @@ namespace NetVanguard.App.ViewModels
             }
         }
 
-        public Axis[] XAxes { get; } = { new Axis { IsVisible = false } };
-        public Axis[] YAxes { get; } = { new Axis { Name = "MB", NamePaint = new SolidColorPaint(SKColors.Gray), LabelsPaint = new SolidColorPaint(SKColors.Gray) } };
+        public Axis[] XAxes { get; } = 
+        { 
+            new Axis 
+            { 
+                IsVisible = false,
+                CrosshairPaint = new SolidColorPaint(SKColors.Gray.WithAlpha(100)) 
+                { 
+                    StrokeThickness = 2, 
+                    PathEffect = new DashEffect(new float[] { 6, 6 }) 
+                } 
+            } 
+        };
+        public Axis[] YAxes { get; } = 
+        { 
+            new Axis 
+            { 
+                Name = "MB", 
+                NamePaint = new SolidColorPaint(SKColors.Gray), 
+                LabelsPaint = new SolidColorPaint(SKColors.Gray),
+                CrosshairPaint = new SolidColorPaint(SKColors.Gray.WithAlpha(50)) 
+                { 
+                    StrokeThickness = 1, 
+                    PathEffect = new DashEffect(new float[] { 3, 3 }) 
+                }
+            } 
+        };
+
+        [RelayCommand]
+        private void CloseDetail()
+        {
+            SelectedApplication = null;
+            SelectedDomain = null;
+        }
 
         [RelayCommand]
         private void ToggleSort(string column)
@@ -271,6 +303,7 @@ namespace NetVanguard.App.ViewModels
             if (Enum.TryParse<ShowcaseType>(viewType, out var type))
             {
                 CurrentShowcase = type;
+                CloseDetail(); // Clear selection when switching categories
             }
         }
 

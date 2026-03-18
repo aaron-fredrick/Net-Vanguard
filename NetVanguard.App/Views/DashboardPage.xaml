@@ -37,7 +37,8 @@
                     Series="{Binding TrafficSeries, Mode=OneWay}"
                     XAxes="{Binding XAxes, Mode=OneWay}"
                     YAxes="{Binding YAxes, Mode=OneWay}"
-                    TooltipPosition="Hidden">
+                    TooltipPosition="Top"
+                    LegendPosition="Top">
                 </lvc:CartesianChart>
             </Grid>
         </Border>
@@ -253,7 +254,12 @@
                         <Grid>
                             <!-- App Detail -->
                             <StackPanel Visibility="{x:Bind ViewModel.IsAppDetailVisible, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" Spacing="16">
-                                <TextBlock Text="Process Analytics" Style="{StaticResource SubtitleTextBlockStyle}" Foreground="Gray"/>
+                                <Grid>
+                                    <TextBlock Text="Process Analytics" Style="{StaticResource SubtitleTextBlockStyle}" Foreground="Gray" VerticalAlignment="Center"/>
+                                    <Button HorizontalAlignment="Right" Background="Transparent" BorderThickness="0" Padding="4" Command="{x:Bind ViewModel.CloseDetailCommand}">
+                                        <FontIcon Glyph="&#xE8BB;" Foreground="Gray" FontSize="14"/>
+                                    </Button>
+                                </Grid>
                                 <StackPanel Spacing="4">
                                     <TextBlock Text="{x:Bind ViewModel.AppDetailName, Mode=OneWay}" FontSize="20" FontWeight="Bold"/>
                                     <TextBlock Text="{x:Bind ViewModel.AppDetailPath, Mode=OneWay}" FontSize="11" Foreground="Gray" TextWrapping="Wrap" MaxLines="2" TextTrimming="CharacterEllipsis"/>
@@ -275,7 +281,12 @@
 
                             <!-- Domain Detail -->
                             <StackPanel Visibility="{x:Bind ViewModel.IsDomainDetailVisible, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" Spacing="16">
-                                <TextBlock Text="Domain Relational Map" Style="{StaticResource SubtitleTextBlockStyle}" Foreground="Gray"/>
+                                <Grid>
+                                    <TextBlock Text="Domain Relational Map" Style="{StaticResource SubtitleTextBlockStyle}" Foreground="Gray" VerticalAlignment="Center"/>
+                                    <Button HorizontalAlignment="Right" Background="Transparent" BorderThickness="0" Padding="4" Command="{x:Bind ViewModel.CloseDetailCommand}">
+                                        <FontIcon Glyph="&#xE8BB;" Foreground="Gray" FontSize="14"/>
+                                    </Button>
+                                </Grid>
                                 <StackPanel Spacing="4">
                                     <TextBlock Text="{x:Bind ViewModel.DomainDetailName, Mode=OneWay}" FontSize="20" FontWeight="Bold"/>
                                     <TextBlock Text="{x:Bind ViewModel.DomainDetailIp, Mode=OneWay}" FontSize="12" Foreground="{ThemeResource SystemAccentColor}"/>
